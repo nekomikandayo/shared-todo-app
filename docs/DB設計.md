@@ -1,67 +1,83 @@
-# DB設計
+# データベーススキーマ
+
 
 ## テーブル一覧
-- users
-- groups
-- group_users
-- todos
+
+| テーブル名 | 説明 |
+|---|---|
+| users | ユーザー情報 |
+| groups | グループ情報 |
+| group_users | ユーザー・グループ中間テーブル |
+| todos | ToDoタスク |
+| sub_tasks | サブタスク |
 
 ---
 
 ## users
 
-| カラム名 | 型 | 説明 |
-|---------|----|------|
-| id | string | ログインID |
-| password | string | パスワード |
-| created_at | datetime | 作成日時 |
-| updated_at | datetime | 更新日時 |
+| カラム名 | 型 | 制約 | 説明 |
+|---|---|---|---|
+| id | int | PK, AUTO_INCREMENT | ユーザーID |
+| username | varchar(255) | UNIQUE, NOT NULL | ログインID |
+| password | varchar(255) | NOT NULL | ハッシュ化 |
+| created_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 作成日時 |
+| updated_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新日時 |
 
 ---
 
 ## groups
 
-| カラム名 | 型 | 説明 |
-|---------|----|------|
-| id | int | 主キー |
-| name | string | グループ名 |
-| invite_token | string | 招待用トークン |
-| token_expired | boolean | 使用済みフラグ |
-| created_at | datetime | 作成日時 |
-| updated_at | datetime | 更新日時 |
+| カラム名 | 型 | 制約 | 説明 |
+|---|---|---|---|
+| id | int | PK, AUTO_INCREMENT | グループID |
+| name | varchar(255) | NOT NULL | グループ名 |
+| invite_token | varchar(255) | UNIQUE, NOT NULL | 招待トークン |
+| expires_at | datetime | NULL | トークン有効期限 |
+| created_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 作成日時 |
+| updated_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新日時 |
 
 ---
 
 ## group_users
 
-| カラム名 | 型 | 説明 |
-|---------|----|------|
-| id | int | 主キー |
-| user_id | string | ユーザーID |
-| group_id | int | グループID |
+| カラム名 | 型 | 制約 | 説明 |
+|---|---|---|---|
+| user_id | int | PK, FK → users.id | ユーザーID |
+| group_id | int | PK, FK → groups.id | グループID |
+| role | int(1) | NOT NULL, DEFAULT 0 | 0:メンバー / 1:管理者 |
+| created_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 参加日時 |
+
+> 複合主キー：(user_id, group_id)
 
 ---
 
 ## todos
 
-| カラム名 | 型 | 説明 |
-|---------|----|------|
-| id | int | 主キー |
-| title | string | タイトル |
-| description | text | 詳細 |
-| due_date | date | 期日（任意） |
-| priority | int | 1:低 2:中 3:高 |
-| status | int | 0:未完了 1:完了 |
-| is_deletable_by_all | boolean | 全員削除可 |
-| user_id | string | 作成者 |
-| group_id | int | グループID |
-| created_at | datetime | 作成日時 |
-| updated_at | datetime | 更新日時 |
+| カラム名 | 型 | 制約 | 説明 |
+|---|---|---|---|
+| id | int | PK, AUTO_INCREMENT | タスクID |
+| title | varchar(255) | NOT NULL | タイトル |
+| description | text | NULL | 詳細 |
+| due_date | date | NULL | 期限 |
+| priority | int(1) | NOT NULL, DEFAULT 2 | 1:低 / 2:中 / 3:高 |
+| status | int(1) | NOT NULL, DEFAULT 0 | 0:未完了 / 1:完了 |
+| created_by | int | NOT NULL, FK → users.id | 作成者 |
+| group_id | int | NOT NULL, FK → groups.id | グループID |
+| delete_scope | int(1) | NOT NULL, DEFAULT 0 | 0:作成者のみ削除可 / 1:全員削除可 |
+| deleted_at | datetime | NULL | 論理削除 |
+| created_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 作成日時 |
+| updated_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新日時 |
 
 ---
 
-## リレーション
+## sub_tasks
 
-- users ⇄ groups → 多対多（group_users）
-- groups → todos → 1対多
-- users → todos → 1対多
+| カラム名 | 型 | 制約 | 説明 |
+|---|---|---|---|
+| id | int | PK, AUTO_INCREMENT | サブタスクID |
+| todo_id | int | NOT NULL, FK → todos.id | 親ToDo |
+| title | varchar(255) | NOT NULL | サブタスク名 |
+| status | int(1) | NOT NULL, DEFAULT 0 | 0:未完了 / 1:完了 |
+| deleted_at | datetime | NULL | 論理削除 |
+| created_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 作成日時 |
+| updated_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新日時 |
