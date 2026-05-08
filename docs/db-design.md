@@ -6,6 +6,7 @@
 |---|---|
 | users | ユーザー情報 |
 | groups | グループ情報 |
+| invite_tokens | 招待URL管理 |
 | group_users | ユーザー・グループ中間テーブル |
 | todos | ToDoタスク |
 
@@ -29,11 +30,21 @@
 |---|---|---|---|
 | id | int | PK, AUTO_INCREMENT | グループID |
 | name | varchar(255) | NOT NULL | グループ名 |
-| invite_token | varchar(255) | UNIQUE, NOT NULL | 招待トークン |
+| created_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 作成日時 |
+| updated_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新日時 |
+
+---
+
+## invite_tokens
+
+| カラム名 | 型 | 制約 | 説明 |
+|---|---|---|---|
+| id | int | PK, AUTO_INCREMENT | 招待トークンID |
+| group_id | int | NOT NULL, FK → groups.id | グループID |
+| token | varchar(255) | UNIQUE, NOT NULL | 招待トークン |
 | used_at | datetime | NULL | トークン使用日時 |
 | expires_at | datetime | NULL | トークン有効期限 |
 | created_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP | 作成日時 |
-| updated_at | datetime | NOT NULL, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP | 更新日時 |
 
 ---
 
@@ -57,8 +68,8 @@
 | title | varchar(255) | NOT NULL | タイトル |
 | description | text | NULL | 詳細 |
 | due_date | date | NULL | 期限 |
-| priority | int(1) | NOT NULL, DEFAULT 2 | 1:低 / 2:中 / 3:高 |
-| status | int(1) | NOT NULL, DEFAULT 0 | 0:未完了 / 1:完了 |
+| priority | tinyint unsigned | NOT NULL, DEFAULT 2 | 1:低 / 2:中 / 3:高 |
+| status | tinyint unsigned | NOT NULL, DEFAULT 0 | 0:未完了 / 1:完了 |
 | created_by | int | NOT NULL, FK → users.id | 作成者 |
 | group_id | int | NOT NULL, FK → groups.id | グループID |
 | deleted_at | datetime | NULL | 論理削除 |
