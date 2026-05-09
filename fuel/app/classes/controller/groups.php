@@ -106,13 +106,45 @@ class Controller_Groups extends Controller_Base
 
         return Response::redirect('/groups');
     }
-
     public function action_join($token = null)
     {
         if (!$token) {
             return Response::redirect('/groups');
         }
-
+    
+        $invite = DB::select(
+                'invite_tokens.*',
+                ['groups.name', 'group_name']
+            )
+            ->from('invite_tokens')
+            ->join('groups', 'INNER')
+            ->on('invite_tokens.group_id', '=', 'groups.id')
+            ->where('invite_tokens.token', '=', $token)
+            ->where('invite_tokens.used_at', 'IS', DB::expr('NULL'))
+            ->where('invite_tokens.expires_at', '>', date('Y-m-d H:i:s'))
+            ->execute()
+            ->current();
+    
+        if (!$invite) {
+            Session::set_flash('error', '招待リンクが無効か、期限切れです。');
+            return Response::redirect('/groups');
+        }
+    
+        return Response::forge(
+            View::forge('groups/join_confirm', [
+                'invite' => $invite,
+                'token' => $token,
+            ], false)
+        );
+    }
+    public function post_join($token = null)
+    {
+        $this->require_csrf();
+    
+        if (!$token) {
+            return Response::redirect('/groups');
+        }
+    
         $invite = DB::select()
             ->from('invite_tokens')
             ->where('token', '=', $token)
@@ -120,35 +152,38 @@ class Controller_Groups extends Controller_Base
             ->where('expires_at', '>', date('Y-m-d H:i:s'))
             ->execute()
             ->current();
-
-        if ($invite) {
-            $user_id = Session::get('user_id');
-            $group_id = $invite['group_id'];
-
-            $exists = DB::select()
-                ->from('group_users')
-                ->where('user_id', '=', $user_id)
-                ->where('group_id', '=', $group_id)
-                ->execute()
-                ->count();
-
-            if ($exists == 0) {
-                DB::insert('group_users')->set(array(
-                    'user_id'  => $user_id,
-                    'group_id' => $group_id,
-                ))->execute();
-            }
-
-            DB::update('invite_tokens')
-                ->set(array('used_at' => date('Y-m-d H:i:s')))
-                ->where('token', '=', $token)
-                ->execute();
-
-            Session::set_flash('success', 'グループに参加しました！');
-        } else {
-            Session::set_flash('error', '招待リンクが無効か、期限が切れています。');
+    
+        if (!$invite) {
+            Session::set_flash('error', '招待リンクが無効か、期限切れです。');
+            return Response::redirect('/groups');
         }
-
+    
+        $user_id = Session::get('user_id');
+        $group_id = $invite['group_id'];
+    
+        $exists = DB::select()
+            ->from('group_users')
+            ->where('user_id', '=', $user_id)
+            ->where('group_id', '=', $group_id)
+            ->execute()
+            ->count();
+    
+        if ($exists == 0) {
+            DB::insert('group_users')->set([
+                'user_id' => $user_id,
+                'group_id' => $group_id,
+            ])->execute();
+        }
+    
+        DB::update('invite_tokens')
+            ->set([
+                'used_at' => date('Y-m-d H:i:s')
+            ])
+            ->where('token', '=', $token)
+            ->execute();
+    
+        Session::set_flash('success', 'グループに参加しました！');
+    
         return Response::redirect('/groups');
     }
 }
