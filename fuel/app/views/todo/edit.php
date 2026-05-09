@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/assets/css/style.css">
+<div class="container">
 <h1>Edit Todo</h1>
 
 <form method="post" action="/todo/update/<?php echo (int) $todo['id']; ?>">
@@ -57,3 +59,4 @@
     </button>
 
 </form>
+</div>

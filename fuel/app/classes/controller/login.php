@@ -21,7 +21,7 @@ class Controller_Login extends Controller_Base
 
                 Session::set('user_id', $user['id']);
 
-                Response::redirect('/');
+                Response::redirect('/groups/index');
 
             } else {
 

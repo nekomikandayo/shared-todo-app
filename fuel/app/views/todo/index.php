@@ -1,8 +1,15 @@
+<link rel="stylesheet" href="/assets/css/style.css">
+<div class="container">
+<a href="/groups">
+    ← グループ一覧へ戻る
+</a>
 <h1>Todo List</h1>
 
-<a href="/todo/create">
-    Create Todo
-</a>
+<?php if ($group_id !== null): ?>
+    <a href="/todo/create?group_id=<?php echo (int) $group_id; ?>">
+        Create Todo
+    </a>
+<?php endif; ?>
 
 <?php
 $priority_labels = Config::get('todo.priority_labels', []);
@@ -33,6 +40,9 @@ $status_labels = Config::get('todo.status_labels', []);
 
             Due Date:
             <?php echo !empty($todo['due_date']) ? e(substr($todo['due_date'], 0, 10)) : e('(未設定)'); ?>
+            <small style="color: #666; margin-left: 10px;">
+            作成者: <?php echo e($todo['creator_name'] ?? '不明'); ?>
+            </small>
         </div>
         <a href="/todo/edit/<?php echo (int) $todo['id']; ?>">
             Edit
@@ -44,3 +54,4 @@ $status_labels = Config::get('todo.status_labels', []);
     </div>
 
 <?php endforeach; ?>
+</div>
