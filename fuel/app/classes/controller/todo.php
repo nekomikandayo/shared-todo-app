@@ -5,29 +5,29 @@ class Controller_Todo extends Controller_Base
     public function before()
     {
         parent::before();
-    
+
         Config::load('todo', true);
     }
     public function action_index()
     {
         $todos = DB::select(
-                'todos.*',
-                ['users.username', 'creator_name']
-            )
+            'todos.*',
+            ['users.username', 'creator_name']
+        )
             ->from('todos')
             ->join('users', 'LEFT')
             ->on('todos.created_by', '=', 'users.id')
             ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
             ->execute()
             ->as_array();
-    
-            return Response::forge(
-                View::forge('todo/index', [
-                    'todos' => $todos,
-                    'group_id' => 0,
-                    'group_name' => null,
-                ], false)
-            );
+
+        return Response::forge(
+            View::forge('todo/index', [
+                'todos' => $todos,
+                'group_id' => 0,
+                'group_name' => null,
+            ], false)
+        );
     }
     public function action_group($group_id)
     {
@@ -65,11 +65,10 @@ class Controller_Todo extends Controller_Base
     public function action_create()
     {
         $group_id = (int) Input::get('group_id');
-        if ($group_id <= 0)
-        {
+        if ($group_id <= 0) {
             exit('Invalid group');
         }
-    
+
         return Response::forge(
             View::forge('todo/create', [
                 'group_id' => $group_id,
@@ -87,38 +86,32 @@ class Controller_Todo extends Controller_Base
 
         $title = trim(Input::post('title'));
 
-        if ($title === '')
-        {
+        if ($title === '') {
             exit('Title is required');
         }
         $description = Input::post('description');
         $priority = (int) Input::post('priority');
         $allowed_priority = array_keys(Config::get('todo.priority_labels', []));
-        if (!in_array($priority, $allowed_priority, true))
-        {
+        if (!in_array($priority, $allowed_priority, true)) {
             exit('Invalid priority');
         }
         $status = (int) Input::post('status');
         $group_id = (int) Input::post('group_id');
         $allowed_status = array_keys(Config::get('todo.status_labels', []));
-        if (!in_array($status, $allowed_status, true))
-        {
+        if (!in_array($status, $allowed_status, true)) {
             exit('Invalid status');
         }
         $due_date = Input::post('due_date');
-        if ($due_date !== '')
-        {
+        if ($due_date !== '') {
             $date = DateTime::createFromFormat('Y-m-d', $due_date);
-        
+
             if (
                 !$date ||
                 $date->format('Y-m-d') !== $due_date
-            )
-            {
+            ) {
                 exit('Invalid due date');
             }
-            if ($due_date < date('Y-m-d'))
-            {
+            if ($due_date < date('Y-m-d')) {
                 exit('Past dates are not allowed');
             }
         }
@@ -134,8 +127,8 @@ class Controller_Todo extends Controller_Base
                 'group_id' => $group_id,
             ])
             ->execute();
-    
-            return Response::redirect('/todo/group/' . $group_id);
+
+        return Response::redirect('/todo/group/' . $group_id);
     }
     public function action_edit($id)
     {
@@ -144,7 +137,7 @@ class Controller_Todo extends Controller_Base
             ->where('id', $id)
             ->execute()
             ->current();
-    
+
         return Response::forge(
             View::forge('todo/edit', [
                 'todo' => $todo
@@ -162,40 +155,34 @@ class Controller_Todo extends Controller_Base
         $this->require_csrf();
 
         $title = trim(Input::post('title'));
-        if ($title === '')
-        {
+        if ($title === '') {
             exit('Title is required');
         }
         $description = Input::post('description');
-    
+
         $priority = (int) Input::post('priority');
         $allowed_priority = array_keys(Config::get('todo.priority_labels', []));
-        if (!in_array($priority, $allowed_priority, true))
-        {
+        if (!in_array($priority, $allowed_priority, true)) {
             exit('Invalid priority');
         }
         $status = (int) Input::post('status');
         $group_id = (int) Input::post('group_id');
 
         $allowed_status = array_keys(Config::get('todo.status_labels', []));
-        if (!in_array($status, $allowed_status, true))
-        {
+        if (!in_array($status, $allowed_status, true)) {
             exit('Invalid status');
         }
         $due_date = Input::post('due_date');
-        if ($due_date !== '')
-        {
+        if ($due_date !== '') {
             $date = DateTime::createFromFormat('Y-m-d', $due_date);
-        
+
             if (
                 !$date ||
                 $date->format('Y-m-d') !== $due_date
-            )
-            {
+            ) {
                 exit('Invalid due date');
             }
-            if ($due_date < date('Y-m-d'))
-            {
+            if ($due_date < date('Y-m-d')) {
                 exit('Past dates are not allowed');
             }
         }
@@ -210,8 +197,8 @@ class Controller_Todo extends Controller_Base
             ])
             ->where('id', $id)
             ->execute();
-    
-        return Response::redirect('/todo');
+
+        return Response::redirect('/todo/group/' . $group_id);
     }
     public function action_delete($id)
     {
@@ -221,7 +208,7 @@ class Controller_Todo extends Controller_Base
             ])
             ->where('id', $id)
             ->execute();
-    
+
         return Response::redirect('/todo');
     }
 }
