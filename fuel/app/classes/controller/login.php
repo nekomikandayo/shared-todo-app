@@ -1,10 +1,12 @@
 <?php
 
-class Controller_Login extends Controller
+class Controller_Login extends Controller_Base
 {
     public function action_index()
     {
         if (Input::method() === 'POST') {
+
+            $this->require_csrf();
 
             $username = Input::post('username');
             $password = Input::post('password');
@@ -23,7 +25,7 @@ class Controller_Login extends Controller
 
             } else {
 
-                echo 'login failed';
+                echo e('login failed');
 
             }
 

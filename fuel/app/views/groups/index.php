@@ -13,16 +13,16 @@
     <h1>グループ一覧</h1>
 
     <?php if ($msg = Session::get_flash('success')): ?>
-        <div class="alert-success"><?php echo $msg; ?></div>
+        <div class="alert-success"><?php echo e($msg); ?></div>
     <?php endif; ?>
     <?php if ($msg = Session::get_flash('error')): ?>
-        <div class="alert-error"><?php echo $msg; ?></div>
+        <div class="alert-error"><?php echo e($msg); ?></div>
     <?php endif; ?>
 
     <?php if ($url = Session::get_flash('invite_url')): ?>
         <div class="invite-box">
             <p>✅ 招待URLを発行しました。24時間以内に共有してください：</p>
-            <input type="text" value="<?php echo $url; ?>" readonly style="width: 100%;">
+            <input type="text" value="<?php echo e($url); ?>" readonly style="width: 100%;">
             <p><small>※一度誰かが使用すると無効になります。</small></p>
         </div>
     <?php endif; ?>
@@ -30,6 +30,7 @@
     <section>
         <h2>新しいグループを作る</h2>
         <form action="/groups/create" method="post">
+            <?php echo Form::csrf(); ?>
             <input type="text" name="group_name" placeholder="グループ名を入力" required>
             <button type="submit">作成</button>
         </form>
@@ -44,7 +45,7 @@
                 <?php foreach ($groups as $group): ?>
                     <li style="margin-bottom: 10px;">
                         <strong><?php echo e($group['name']); ?></strong> 
-                        <a href="/groups/invite/<?php echo $group['id']; ?>" style="margin-left: 10px;">[招待URLを発行]</a>
+                        <a href="/groups/invite/<?php echo (int) $group['id']; ?>" style="margin-left: 10px;">[招待URLを発行]</a>
                     </li>
                 <?php endforeach; ?>
             </ul>

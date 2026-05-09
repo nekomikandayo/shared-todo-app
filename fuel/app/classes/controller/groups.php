@@ -1,6 +1,6 @@
 <?php
 
-class Controller_Groups extends Controller
+class Controller_Groups extends Controller_Base
 {
     public function before()
     {
@@ -29,6 +29,13 @@ class Controller_Groups extends Controller
 
     public function action_create()
     {
+        return $this->post_create();
+    }
+
+    public function post_create()
+    {
+        $this->require_csrf();
+
         $group_name = Input::post('group_name');
 
         if ($group_name) {

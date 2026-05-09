@@ -1,6 +1,7 @@
 <h1>Create Todo</h1>
 
 <form method="post" action="/todo/store">
+    <?php echo Form::csrf(); ?>
 
     <div>
         <label>Title</label>
@@ -16,9 +17,11 @@
         <label>Priority</label>
 
         <select name="priority">
-            <option value="1">Low</option>
-            <option value="2" selected>Medium</option>
-            <option value="3">High</option>
+            <?php foreach (Config::get('todo.priority_labels', []) as $value => $label): ?>
+                <option value="<?php echo (int) $value; ?>"<?php if ((int) $value === 2) echo ' selected'; ?>>
+                    <?php echo e($label); ?>
+                </option>
+            <?php endforeach; ?>
         </select>
     </div>
 
@@ -26,8 +29,11 @@
         <label>Status</label>
 
         <select name="status">
-            <option value="0">Incomplete</option>
-            <option value="1">Complete</option>
+            <?php foreach (Config::get('todo.status_labels', []) as $value => $label): ?>
+                <option value="<?php echo (int) $value; ?>">
+                    <?php echo e($label); ?>
+                </option>
+            <?php endforeach; ?>
         </select>
     </div>
 
