@@ -3,19 +3,28 @@
 <h1>ログイン</h1>
 
 <form method="post" action="/login">
+
     <?php echo Form::csrf(); ?>
-    <div>
-        <label>ユーザーID</label>
-        <input type="text" name="username" placeholder="example@example.com">
-    </div>
 
-    <div>
-        <label>パスワード</label>
-        <input type="password" name="password" placeholder="********">
-    </div>
+    <input type="text" name="username" placeholder="ユーザー名">
 
-    <button type="submit">
+    <input type="password" name="password" placeholder="パスワード">
+
+    <button
+        type="submit"
+        name="mode"
+        value="login"
+    >
         ログイン
     </button>
+
+    <button
+        type="submit"
+        name="mode"
+        value="register"
+    >
+        新規登録
+    </button>
+
 </form>
 </div>
