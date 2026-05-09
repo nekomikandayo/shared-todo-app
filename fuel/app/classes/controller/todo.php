@@ -122,7 +122,7 @@ class Controller_Todo extends Controller_Base
             ])
             ->execute();
     
-        return Response::redirect('/todo');
+            return Response::redirect('/todo/group/' . $group_id);
     }
     public function action_edit($id)
     {

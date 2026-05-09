@@ -5,7 +5,7 @@
 </a>
 <h1>Todo List</h1>
 
-<?php if ($group_id !== null): ?>
+<?php if (!empty($group_id)): ?>
     <a href="/todo/create?group_id=<?php echo (int) $group_id; ?>">
         Create Todo
     </a>
