@@ -3,77 +3,195 @@
 <head>
     <meta charset="utf-8">
     <title>グループ一覧</title>
+
     <link rel="stylesheet" href="/assets/css/style.css">
-    <style>
-        .alert-success { color: green; border: 1px solid green; padding: 10px; margin-bottom: 10px; }
-        .alert-error { color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px; }
-        .invite-box { background: #f9f9f9; padding: 10px; border: 1px dashed #ccc; margin: 10px 0; }
-    </style>
 </head>
+
 <body>
-    <div class="container">
-    <h1>グループ一覧</h1>
 
-    <?php if ($msg = Session::get_flash('success')): ?>
-        <div class="alert-success"><?php echo e($msg); ?></div>
-    <?php endif; ?>
-    <?php if ($msg = Session::get_flash('error')): ?>
-        <div class="alert-error"><?php echo e($msg); ?></div>
-    <?php endif; ?>
+    <div class="container container--narrow">
 
-    <?php if ($url = Session::get_flash('invite_url')): ?>
-        <div class="invite-box">
-            <p>✅ 招待URLを発行しました。24時間以内に共有してください：</p>
-            <input type="text" value="<?php echo e($url); ?>" readonly style="width: 100%;">
-            <p><small>※一度誰かが使用すると無効になります。</small></p>
-        </div>
-    <?php endif; ?>
+        <div class="group-page">
 
-    <section>
-        <h2>新しいグループを作る</h2>
-        <form action="/groups/create" method="post">
-            <?php echo Form::csrf(); ?>
-            <input type="text" name="group_name" placeholder="グループ名を入力" required>
-            <button type="submit">作成</button>
-        </form>
-    </section>
+            <header class="group-section">
+                <h1 class="page-title">
+                    グループ一覧
+                </h1>
+            </header>
 
-    <hr>
+            <?php if ($msg = Session::get_flash('success')): ?>
+                <div class="alert alert--success">
+                    <?php echo e($msg); ?>
+                </div>
+            <?php endif; ?>
 
-    <section>
-        <h2>参加中のグループ</h2>
-        <?php if (!empty($groups)): ?>
-            <ul>
-                <?php foreach ($groups as $group): ?>
-                    <li style="margin-bottom: 10px;">
-                        <a href="/todo/group/<?php echo (int) $group['id']; ?>" style="font-weight: bold; font-size: 1.1em;">
-                            <?php echo e($group['name']); ?>
-                        </a>
+            <?php if ($msg = Session::get_flash('error')): ?>
+                <div class="alert alert--error">
+                    <?php echo e($msg); ?>
+                </div>
+            <?php endif; ?>
 
-                        <a href="/groups/invite/<?php echo (int) $group['id']; ?>" style="margin-left: 15px; color: #007bff; text-decoration: none;">
-                        [招待URLを発行]
-                        </a>
+            <?php if ($url = Session::get_flash('invite_url')): ?>
 
-                        <form action="/groups/delete/<?php echo (int) $group['id']; ?>" method="post" style="display: inline; margin-left: 15px;">
+                <div class="invite-box">
+
+                    <p class="text-muted">
+                        招待URLを発行しました（24時間以内に共有してください）
+                    </p>
+
+                    <input
+                        class="invite-input"
+                        type="text"
+                        value="<?php echo e($url); ?>"
+                        readonly
+                    >
+
+                    <p class="text-muted">
+                        ※ 一度誰かが使用すると無効になります。
+                    </p>
+
+                </div>
+
+            <?php endif; ?>
+
+            <section class="group-section">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h2 class="group-card__title">
+                            新しいグループを作る
+                        </h2>
+                    </div>
+
+                    <div class="card-body">
+
+                        <form
+                            class="group-form"
+                            action="/groups/create"
+                            method="post"
+                        >
+
                             <?php echo Form::csrf(); ?>
-                            <button
-                                type="submit"
-                                style="color: #dc3545; background: none; border: none; padding: 0; cursor: pointer; text-decoration: none;"
-                                onclick="return confirm('本当にこのグループを削除しますか？\n削除すると元に戻せません。');"
-                            >
-                                [削除]
-                            </button>
-                        </form>
-                    </li>
-                <?php endforeach; ?>             
-            </ul>
-        <?php else: ?>
-            <p>参加中のグループはありません。</p>
-        <?php endif; ?>
-    </section>
 
-    <br>
-    <a href="/logout">ログアウト</a>
+                            <div class="form-group">
+
+                                <input
+                                    class="form-control"
+                                    type="text"
+                                    name="group_name"
+                                    placeholder="グループ名を入力"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="group-form__actions">
+
+                                <button
+                                    class="btn btn--primary"
+                                    type="submit"
+                                >
+                                    作成
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section class="group-section">
+
+                <h2 class="group-card__title">
+                    参加中のグループ
+                </h2>
+
+                <?php if (!empty($groups)): ?>
+
+                    <ul class="group-list">
+
+                        <?php foreach ($groups as $group): ?>
+
+                            <li class="group-card card">
+
+                                <div class="group-card__left">
+
+                                    <a
+                                        class="group-card__title"
+                                        href="/todo/group/<?php echo (int) $group['id']; ?>"
+                                    >
+                                        <?php echo e($group['name']); ?>
+                                    </a>
+
+                                </div>
+
+                                <div class="group-card__actions">
+
+                                    <a
+                                        class="btn btn--secondary btn--sm"
+                                        href="/groups/invite/<?php echo (int) $group['id']; ?>"
+                                    >
+                                        招待URL
+                                    </a>
+
+                                    <form
+                                        action="/groups/delete/<?php echo (int) $group['id']; ?>"
+                                        method="post"
+                                    >
+
+                                        <?php echo Form::csrf(); ?>
+
+                                        <button
+                                            class="btn btn--secondary btn--sm"
+                                            type="submit"
+                                            onclick="return confirm('本当にこのグループを削除しますか？\n削除すると元に戻せません。');"
+                                        >
+                                            削除
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                            </li>
+
+                        <?php endforeach; ?>
+
+                    </ul>
+
+                <?php else: ?>
+
+                    <div class="card group-empty text-center">
+
+                        <p class="text-muted">
+                            参加中のグループはありません。
+                        </p>
+
+                    </div>
+
+                <?php endif; ?>
+
+            </section>
+
+            <footer>
+
+                <a
+                    class="btn btn--secondary"
+                    href="/logout"
+                >
+                    ログアウト
+                </a>
+
+            </footer>
+
+        </div>
+
     </div>
+
 </body>
 </html>

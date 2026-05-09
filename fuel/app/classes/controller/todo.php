@@ -25,27 +25,40 @@ class Controller_Todo extends Controller_Base
                 View::forge('todo/index', [
                     'todos' => $todos,
                     'group_id' => 0,
+                    'group_name' => null,
                 ], false)
             );
     }
     public function action_group($group_id)
     {
+        $group_id = (int) $group_id;
+
+        $group_row = DB::select('name')
+            ->from('groups')
+            ->where('id', '=', $group_id)
+            ->where('deleted_at', 'IS', DB::expr('NULL'))
+            ->execute()
+            ->current();
+
+        $group_name = $group_row ? $group_row['name'] : null;
+
         $todos = DB::select(
-            'todos.*', 
-            ['users.username', 'creator_name'] 
+            'todos.*',
+            ['users.username', 'creator_name']
         )
-        ->from('todos')
-        ->join('users', 'LEFT')
-        ->on('todos.created_by', '=', 'users.id')
-        ->where('todos.group_id', '=', $group_id)
-        ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
-        ->execute()
-        ->as_array();
-    
+            ->from('todos')
+            ->join('users', 'LEFT')
+            ->on('todos.created_by', '=', 'users.id')
+            ->where('todos.group_id', '=', $group_id)
+            ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
+            ->execute()
+            ->as_array();
+
         return Response::forge(
             View::forge('todo/index', [
                 'todos' => $todos,
                 'group_id' => $group_id,
+                'group_name' => $group_name,
             ], false)
         );
     }
@@ -122,7 +135,7 @@ class Controller_Todo extends Controller_Base
             ])
             ->execute();
     
-        return Response::redirect('/todo');
+            return Response::redirect('/todo/group/' . $group_id);
     }
     public function action_edit($id)
     {

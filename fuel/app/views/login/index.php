@@ -1,30 +1,75 @@
 <link rel="stylesheet" href="/assets/css/style.css">
-<div class="container">
-<h1>ログイン</h1>
 
-<form method="post" action="/login">
+<div class="login-page">
 
-    <?php echo Form::csrf(); ?>
+    <div class="card login-card">
 
-    <input type="text" name="username" placeholder="ユーザー名">
+        <div class="card-body">
 
-    <input type="password" name="password" placeholder="パスワード">
+            <h1 class="page-title login-title">
+                ログイン
+            </h1>
 
-    <button
-        type="submit"
-        name="mode"
-        value="login"
-    >
-        ログイン
-    </button>
+            <form
+                class="login-form"
+                method="post"
+                action="/login"
+            >
 
-    <button
-        type="submit"
-        name="mode"
-        value="register"
-    >
-        新規登録
-    </button>
+                <?php echo Form::csrf(); ?>
 
-</form>
+                <div class="form-group">
+
+                    <input
+                        class="form-control"
+                        type="text"
+                        name="username"
+                        placeholder="ユーザー名"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <input
+                        class="form-control"
+                        type="password"
+                        name="password"
+                        placeholder="パスワード"
+                    >
+
+                </div>
+
+                <div class="login-form__actions">
+
+                    <button
+                        class="btn btn--primary"
+                        type="submit"
+                        name="mode"
+                        value="login"
+                    >
+                        ログイン
+                    </button>
+
+                </div>
+
+                <div class="login-form__actions">
+
+                    <button
+                        class="btn btn--secondary"
+                        type="submit"
+                        name="mode"
+                        value="register"
+                    >
+                        新規登録
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
