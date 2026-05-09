@@ -1,6 +1,6 @@
 <?php
 
-class Controller_Todo extends Controller
+class Controller_Todo extends Controller_Base
 {
     public function action_index()
     {
@@ -24,6 +24,13 @@ class Controller_Todo extends Controller
     }
     public function action_store()
     {
+        return $this->post_store();
+    }
+
+    public function post_store()
+    {
+        $this->require_csrf();
+
         $title = trim(Input::post('title'));
 
         if ($title === '')
@@ -31,13 +38,15 @@ class Controller_Todo extends Controller
             exit('Title is required');
         }
         $description = Input::post('description');
-        $priority = Input::post('priority');
-        if (!in_array($priority, [1, 2, 3]))
+        $priority = (int) Input::post('priority');
+        $allowed_priority = array_keys(Config::get('todo.priority_labels', []));
+        if (!in_array($priority, $allowed_priority, true))
         {
             exit('Invalid priority');
         }
-        $status = Input::post('status');
-        if (!in_array($status, [0, 1]))
+        $status = (int) Input::post('status');
+        $allowed_status = array_keys(Config::get('todo.status_labels', []));
+        if (!in_array($status, $allowed_status, true))
         {
             exit('Invalid status');
         }
@@ -90,6 +99,13 @@ class Controller_Todo extends Controller
 
     public function action_update($id)
     {
+        return $this->post_update($id);
+    }
+
+    public function post_update($id)
+    {
+        $this->require_csrf();
+
         $title = trim(Input::post('title'));
         if ($title === '')
         {
@@ -97,13 +113,15 @@ class Controller_Todo extends Controller
         }
         $description = Input::post('description');
     
-        $priority = Input::post('priority');
-        if (!in_array($priority, [1, 2, 3]))
+        $priority = (int) Input::post('priority');
+        $allowed_priority = array_keys(Config::get('todo.priority_labels', []));
+        if (!in_array($priority, $allowed_priority, true))
         {
             exit('Invalid priority');
         }
-        $status = Input::post('status');
-        if (!in_array($status, [0, 1]))
+        $status = (int) Input::post('status');
+        $allowed_status = array_keys(Config::get('todo.status_labels', []));
+        if (!in_array($status, $allowed_status, true))
         {
             exit('Invalid status');
         }

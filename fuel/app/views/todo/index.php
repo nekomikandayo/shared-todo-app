@@ -4,27 +4,41 @@
     Create Todo
 </a>
 
+<?php
+$priority_labels = Config::get('todo.priority_labels', []);
+$status_labels = Config::get('todo.status_labels', []);
+?>
 <?php foreach ($todos as $todo): ?>
 
     <div>
-        <?php echo htmlspecialchars($todo['title'], ENT_QUOTES, 'UTF-8'); ?>
+        <?php echo e($todo['title'] ?? ''); ?>
         <div>
-            <?php echo htmlspecialchars($todo['description'], ENT_QUOTES, 'UTF-8'); ?>
+            <?php echo e($todo['description'] ?? ''); ?>
 
             Priority:
-            <?php echo (int) $todo['priority']; ?>
+            <?php
+            $p = (int) $todo['priority'];
+            echo isset($priority_labels[$p])
+                ? e($priority_labels[$p])
+                : e((string) $p);
+            ?>
 
             Status:
-            <?php echo ((int) $todo['status'] === 1) ? 'Complete' : 'Incomplete'; ?>
+            <?php
+            $s = (int) $todo['status'];
+            echo isset($status_labels[$s])
+                ? e($status_labels[$s])
+                : e((string) $s);
+            ?>
 
             Due Date:
-            <?php echo !empty($todo['due_date']) ? htmlspecialchars(substr($todo['due_date'], 0, 10), ENT_QUOTES, 'UTF-8') : '(未設定)'; ?>
+            <?php echo !empty($todo['due_date']) ? e(substr($todo['due_date'], 0, 10)) : e('(未設定)'); ?>
         </div>
-        <a href="/todo/edit/<?php echo $todo['id']; ?>">
+        <a href="/todo/edit/<?php echo (int) $todo['id']; ?>">
             Edit
         </a>
 
-        <a href="/todo/delete/<?php echo $todo['id']; ?>">
+        <a href="/todo/delete/<?php echo (int) $todo['id']; ?>">
             Delete
         </a>
     </div>
