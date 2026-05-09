@@ -1,8 +1,15 @@
+<link rel="stylesheet" href="/assets/css/style.css">
+<div class="container">
 <h1>Create Todo</h1>
 
 <form method="post" action="/todo/store">
     <?php echo Form::csrf(); ?>
 
+    <input
+        type="hidden"
+        name="group_id"
+        value="<?php echo (int) $group_id; ?>"
+    >
     <div>
         <label>Title</label>
         <input type="text" name="title">
@@ -47,3 +54,4 @@
     </button>
 
 </form>
+</div>

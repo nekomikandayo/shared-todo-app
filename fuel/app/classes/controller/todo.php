@@ -2,24 +2,65 @@
 
 class Controller_Todo extends Controller_Base
 {
+    public function before()
+    {
+        parent::before();
+    
+        Config::load('todo', true);
+    }
     public function action_index()
     {
-        $todos = DB::select()
+        $todos = DB::select(
+                'todos.*',
+                ['users.username', 'creator_name']
+            )
             ->from('todos')
-            ->where('deleted_at', 'IS', null)
+            ->join('users', 'LEFT')
+            ->on('todos.created_by', '=', 'users.id')
+            ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
             ->execute()
             ->as_array();
     
+            return Response::forge(
+                View::forge('todo/index', [
+                    'todos' => $todos,
+                    'group_id' => 0,
+                ], false)
+            );
+    }
+    public function action_group($group_id)
+    {
+        $todos = DB::select(
+            'todos.*', 
+            ['users.username', 'creator_name'] 
+        )
+        ->from('todos')
+        ->join('users', 'LEFT')
+        ->on('todos.created_by', '=', 'users.id')
+        ->where('todos.group_id', '=', $group_id)
+        ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
+        ->execute()
+        ->as_array();
+    
         return Response::forge(
             View::forge('todo/index', [
-                'todos' => $todos
+                'todos' => $todos,
+                'group_id' => $group_id,
             ], false)
         );
     }
     public function action_create()
-    { 
+    {
+        $group_id = (int) Input::get('group_id');
+        if ($group_id <= 0)
+        {
+            exit('Invalid group');
+        }
+    
         return Response::forge(
-            View::forge('todo/create', [], false)
+            View::forge('todo/create', [
+                'group_id' => $group_id,
+            ], false)
         );
     }
     public function action_store()
@@ -45,6 +86,7 @@ class Controller_Todo extends Controller_Base
             exit('Invalid priority');
         }
         $status = (int) Input::post('status');
+        $group_id = (int) Input::post('group_id');
         $allowed_status = array_keys(Config::get('todo.status_labels', []));
         if (!in_array($status, $allowed_status, true))
         {
@@ -76,7 +118,7 @@ class Controller_Todo extends Controller_Base
                 'status' => $status,
                 'due_date' => $due_date ?: null,
                 'created_by' => 1,
-                'group_id' => 1,
+                'group_id' => $group_id,
             ])
             ->execute();
     
@@ -120,6 +162,8 @@ class Controller_Todo extends Controller_Base
             exit('Invalid priority');
         }
         $status = (int) Input::post('status');
+        $group_id = (int) Input::post('group_id');
+
         $allowed_status = array_keys(Config::get('todo.status_labels', []));
         if (!in_array($status, $allowed_status, true))
         {

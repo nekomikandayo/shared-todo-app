@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/assets/css/style.css">
+<div class="container">
 <h1>ログイン</h1>
 
 <form method="post" action="/login">
@@ -16,3 +18,4 @@
         ログイン
     </button>
 </form>
+</div>

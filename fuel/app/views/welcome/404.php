@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<title><?php echo e($title); ?></title>
+	<link rel="stylesheet" href="/assets/css/style.css">
 	<?php echo Asset::css('bootstrap.css'); ?>
 	<style>
 		#logo{

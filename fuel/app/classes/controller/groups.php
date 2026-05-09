@@ -5,25 +5,28 @@ class Controller_Groups extends Controller_Base
     public function before()
     {
         parent::before();
+    
         if (! Session::get('user_id')) {
-            Response::redirect('/login');
+            return Response::redirect('/login');
         }
     }
 
     public function action_index()
     {
         $user_id = Session::get('user_id');
-
+    
         $groups = DB::select('groups.id', 'groups.name')
             ->from('groups')
-            ->join('group_users')
+            ->join('group_users', 'INNER')
             ->on('groups.id', '=', 'group_users.group_id')
             ->where('group_users.user_id', '=', $user_id)
+            ->where('groups.deleted_at', 'IS', DB::expr('NULL'))
             ->execute()
             ->as_array();
-
+    
         $view = View::forge('groups/index');
         $view->set('groups', $groups);
+    
         return $view;
     }
 
@@ -53,7 +56,37 @@ class Controller_Groups extends Controller_Base
                 //error
             }
         }
-        Response::redirect('/groups');
+        return Response::redirect('/groups');
+    }
+    public function action_delete($group_id)
+    {
+        return $this->post_delete($group_id);
+    }
+
+    public function post_delete($group_id)
+    {
+        $this->require_csrf();
+
+        $user_id = Session::get('user_id');
+        $is_member = DB::select()
+            ->from('group_users')
+            ->where('group_id', '=', $group_id)
+            ->where('user_id', '=', $user_id)
+            ->execute()
+            ->count();
+
+        if ($is_member > 0) {
+            DB::update('groups')
+                ->set(array('deleted_at' => date('Y-m-d H:i:s')))
+                ->where('id', '=', $group_id)
+                ->execute();
+
+            Session::set_flash('success', 'グループを削除しました。');
+        } else {
+            Session::set_flash('error', '削除権限がありません。');
+        }
+
+        return Response::redirect('/groups');
     }
 
     public function action_invite($group_id)
@@ -71,13 +104,13 @@ class Controller_Groups extends Controller_Base
         $invite_url = "http://localhost/groups/join/" . $token;
         Session::set_flash('invite_url', $invite_url);
 
-        Response::redirect('/groups');
+        return Response::redirect('/groups');
     }
 
     public function action_join($token = null)
     {
         if (!$token) {
-            Response::redirect('/groups');
+            return Response::redirect('/groups');
         }
 
         $invite = DB::select()
@@ -116,6 +149,6 @@ class Controller_Groups extends Controller_Base
             Session::set_flash('error', '招待リンクが無効か、期限が切れています。');
         }
 
-        Response::redirect('/groups');
+        return Response::redirect('/groups');
     }
 }

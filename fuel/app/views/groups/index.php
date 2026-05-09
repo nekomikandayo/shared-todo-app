@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>グループ一覧</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
         .alert-success { color: green; border: 1px solid green; padding: 10px; margin-bottom: 10px; }
         .alert-error { color: red; border: 1px solid red; padding: 10px; margin-bottom: 10px; }
@@ -10,6 +11,7 @@
     </style>
 </head>
 <body>
+    <div class="container">
     <h1>グループ一覧</h1>
 
     <?php if ($msg = Session::get_flash('success')): ?>
@@ -44,10 +46,26 @@
             <ul>
                 <?php foreach ($groups as $group): ?>
                     <li style="margin-bottom: 10px;">
-                        <strong><?php echo e($group['name']); ?></strong> 
-                        <a href="/groups/invite/<?php echo (int) $group['id']; ?>" style="margin-left: 10px;">[招待URLを発行]</a>
+                        <a href="/todo/group/<?php echo (int) $group['id']; ?>" style="font-weight: bold; font-size: 1.1em;">
+                            <?php echo e($group['name']); ?>
+                        </a>
+
+                        <a href="/groups/invite/<?php echo (int) $group['id']; ?>" style="margin-left: 15px; color: #007bff; text-decoration: none;">
+                        [招待URLを発行]
+                        </a>
+
+                        <form action="/groups/delete/<?php echo (int) $group['id']; ?>" method="post" style="display: inline; margin-left: 15px;">
+                            <?php echo Form::csrf(); ?>
+                            <button
+                                type="submit"
+                                style="color: #dc3545; background: none; border: none; padding: 0; cursor: pointer; text-decoration: none;"
+                                onclick="return confirm('本当にこのグループを削除しますか？\n削除すると元に戻せません。');"
+                            >
+                                [削除]
+                            </button>
+                        </form>
                     </li>
-                <?php endforeach; ?>
+                <?php endforeach; ?>             
             </ul>
         <?php else: ?>
             <p>参加中のグループはありません。</p>
@@ -56,5 +74,6 @@
 
     <br>
     <a href="/logout">ログアウト</a>
+    </div>
 </body>
 </html>
