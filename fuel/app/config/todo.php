@@ -3,14 +3,14 @@
 return [
 
     'priority_labels' => [
-        1 => 'Low',
-        2 => 'Medium',
-        3 => 'High',
+        1 => '低',
+        2 => '中',
+        3 => '高',
     ],
 
     'status_labels' => [
-        0 => 'Incomplete',
-        1 => 'Complete',
+        0 => '未完了',
+        1 => '完了',
     ],
 
 ];

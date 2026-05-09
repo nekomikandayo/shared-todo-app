@@ -3,34 +3,65 @@
 <head>
     <meta charset="utf-8">
     <title>グループ参加確認</title>
+
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
+
 <body>
 
-<div class="container">
+    <div class="container container--narrow">
 
-    <h1>グループ参加確認</h1>
+        <div class="card confirm-card">
 
-    <p>
-        「<?php echo e($invite['group_name']); ?>」
-        に参加しますか？
-    </p>
+            <div class="card-header">
 
-    <form method="post" action="/groups/join/<?php echo e($token); ?>">
-        <?php echo Form::csrf(); ?>
+                <h1 class="page-title text-center">
+                    グループ参加確認
+                </h1>
 
-        <button type="submit">
-            参加する
-        </button>
-    </form>
+            </div>
 
-    <br>
+            <div class="card-body">
 
-    <a href="/login">
-        キャンセル
-    </a>
+                <p class="confirm-message">
 
-</div>
+                    「<?php echo e($invite['group_name']); ?>」に参加しますか？
+
+                </p>
+
+                <form
+                    class="confirm-form"
+                    method="post"
+                    action="/groups/join/<?php echo e($token); ?>"
+                >
+
+                    <?php echo Form::csrf(); ?>
+
+                    <div class="confirm-form__actions">
+
+                        <a
+                            class="btn btn--secondary"
+                            href="/login"
+                        >
+                            キャンセル
+                        </a>
+
+                        <button
+                            class="btn btn--primary"
+                            type="submit"
+                        >
+                            参加する
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
 </html>

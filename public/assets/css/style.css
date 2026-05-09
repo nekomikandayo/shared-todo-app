@@ -1,12 +1,643 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+   :root {
+    --color-primary: #111827;
+    --color-primary-hover: #1f2937;
+
+    --color-secondary: #f3f4f6;
+    --color-background: #f9fafb;
+
+    --color-border: #e5e7eb;
+
+    --color-text: #111827;
+    --color-text-light: #6b7280;
+
+    --color-success: #16a34a;
+    --color-error: #dc2626;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.08);
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+
+    --transition: 0.2s ease;
 }
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family:
+        "Inter",
+        "Yu Gothic",
+        "Hiragino Sans",
+        sans-serif;
+
+    background: var(--color-background);
+    color: var(--color-text);
+
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
 .container {
-    width: 90%;
-    max-width: 1000px;
-    margin: 40px auto;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.container--narrow {
+    max-width: 600px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-muted {
+    color: var(--color-text-light);
+}
+
+/* ==========================================================================
+   Card
+   ========================================================================== */
+
+.card {
+    background: #ffffff;
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-sm);
+
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 24px 24px 0;
+}
+
+.card-body {
+    padding: 24px;
+}
+
+.card-footer {
+    padding: 0 24px 24px;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 12px 18px;
+
+    border-radius: var(--radius-sm);
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition:
+        background var(--transition),
+        transform var(--transition);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn--primary {
+    background: var(--color-primary);
+    color: #ffffff;
+}
+
+.btn--primary:hover {
+    background: var(--color-primary-hover);
+}
+
+.btn--secondary {
+    background: var(--color-secondary);
+    color: var(--color-text);
+}
+
+.btn--secondary:hover {
+    background: #e5e7eb;
+}
+
+.btn--sm {
+    padding: 10px 14px;
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--radius-sm);
+
+    background: #ffffff;
+
+    font-size: 14px;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.form-control:focus {
+    outline: none;
+
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.todo-form__actions,
+.group-form__actions,
+.confirm-form__actions {
+    margin-top: 24px;
+
+    display: flex;
+
+    gap: 12px;
+}
+.login-form__actions {
+    gap: 12px;
+}
+
+
+/* ==========================================================================
+   Login
+   ========================================================================== */
+
+.login-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-title {
+    text-align: center;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.login-form .form-group {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Group Page
+   ========================================================================== */
+
+.group-page {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.group-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.group-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.group-card {
+    padding: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 16px;
+}
+
+.group-card__left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.group-card__title {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.group-card__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.group-empty {
+    padding: 32px;
+}
+
+.group-form .form-group {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Alert
+   ========================================================================== */
+
+.alert {
+    padding: 14px 18px;
+
+    border-radius: var(--radius-sm);
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.alert--success {
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--color-success);
+}
+
+.alert--error {
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--color-error);
+}
+
+/* ==========================================================================
+   Invite
+   ========================================================================== */
+
+.invite-box {
+    background: #ffffff;
+
+    border: 1px dashed var(--color-border);
+
+    border-radius: var(--radius-sm);
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.invite-input {
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid var(--color-border);
+
+    border-radius: var(--radius-sm);
+
+    background: #f9fafb;
+}
+
+/* ==========================================================================
+   Todo
+   ========================================================================== */
+
+.todo-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.todo-page__header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.todo-page__title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.todo-page__group-name {
+    margin: 0;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.back-link {
+    color: var(--color-text-light);
+
+    font-size: 14px;
+    font-weight: 500;
+
+    width: fit-content;
+}
+
+.back-link:hover {
+    color: var(--color-text);
+}
+
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.todo-card {
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.todo-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: var(--shadow-md);
+}
+
+.todo-card__header {
+    padding: 24px 24px 0;
+}
+
+.todo-card__title {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.todo-card__body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.todo-card__description {
+    margin-bottom: 20px;
+
+    color: var(--color-text-light);
+
+    white-space: pre-wrap;
+}
+
+.todo-meta {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    width: 100%;
+}
+
+.todo-meta__item {
+    background: var(--color-secondary);
+
+    padding: 14px;
+
+    border-radius: var(--radius-sm);
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.todo-meta__label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    color: var(--color-text-light);
+
+    text-transform: uppercase;
+}
+
+.todo-meta__value {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.todo-card__footer {
+    padding: 0 24px 24px;
+
+    display: flex;
+    gap: 12px;
+}
+
+.todo-form .form-group:last-of-type {
+    margin-bottom: 0;
+}
+
+/* Memo Box */
+.todo-memo {
+    background: #f8fafc;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
+}
+
+.todo-memo__label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.todo-memo__content {
+    margin: 0;
+    color: var(--color-text);
+    text-align: left;
+    line-height: 1.6;
+}
+
+/* Priority & Status Badges */
+.todo-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.todo-badge--low {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.todo-badge--medium {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.todo-badge--high {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.todo-badge--undone {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.todo-badge--done {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* ==========================================================================
+   Empty State
+   ========================================================================== */
+
+.empty-card {
+    padding: 40px;
+}
+
+/* ==========================================================================
+   Confirm Page
+   ========================================================================== */
+
+.confirm-card {
+    text-align: center;
+}
+
+.confirm-card .page-title {
+    margin-bottom: 0;
+}
+
+.confirm-message {
+    margin-bottom: 24px;
+
+    font-size: 18px;
+}
+
+.confirm-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.confirm-form__actions {
+    justify-content: center;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    .container {
+        padding: 24px 16px;
+    }
+
+    .page-title {
+        font-size: 26px;
+    }
+
+    .group-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .group-card__actions {
+        width: 100%;
+    }
+
+    .todo-meta {
+        flex-wrap: wrap;
+    }
+
+    .todo-card__footer {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
 }
