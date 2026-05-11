@@ -1,5 +1,8 @@
 const openButton = document.getElementById('open-modal');
 const createModal = document.getElementById('todo-modal');
+const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute('content');
 
 if (openButton) {
 
@@ -188,9 +191,11 @@ function TodoViewModel() {
             const response = await fetch('/todo/ajax_create', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                   
                 },
                 body: JSON.stringify({
+                    csrf_token: csrfToken,
                     title: title,
                     description: self.newTodoDescription(),
                     priority: self.newTodoPriority(),
@@ -241,7 +246,13 @@ function TodoViewModel() {
         try {
 
             const response = await fetch('/todo/ajax_delete/' + todo.id, {
-                method: 'POST'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    csrf_token: csrfToken
+                })
             });
 
             const data = await response.json();
@@ -316,9 +327,10 @@ function TodoViewModel() {
             const response = await fetch('/todo/ajax_update_status/' + todo.id, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    csrf_token: csrfToken,
                     status: newStatus
                 })
             });
@@ -354,9 +366,12 @@ function TodoViewModel() {
                 {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                 
+
                     },
                     body: JSON.stringify({
+                        csrf_token: csrfToken,
                         title: self.editTodoTitle(),
                         description: self.editTodoDescription(),
                         priority: self.editTodoPriority(),

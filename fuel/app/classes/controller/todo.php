@@ -213,6 +213,7 @@ class Controller_Todo extends Controller_Base
     }
     public function post_ajax_create()
     {
+        $this->require_csrf();
         $data = json_decode(file_get_contents('php://input'), true);
 
         $title = trim($data['title'] ?? '');
@@ -271,6 +272,7 @@ class Controller_Todo extends Controller_Base
 
     public function post_ajax_delete($id)
     {
+        $this->require_csrf();
         DB::update('todos')
             ->set([
                 'deleted_at' => date('Y-m-d H:i:s')
@@ -291,6 +293,7 @@ class Controller_Todo extends Controller_Base
 
     public function post_ajax_update_status($id)
     {
+        $this->require_csrf();
         $data = json_decode(file_get_contents('php://input'), true);
 
         $status = (int) ($data['status'] ?? 0);
@@ -315,6 +318,7 @@ class Controller_Todo extends Controller_Base
 
     public function post_ajax_update($id = null)
     {
+        $this->require_csrf();
         if ($id === null) {
 
             return $this->response([

@@ -1,3 +1,7 @@
+<meta
+    name="csrf-token"
+    content="<?php echo Security::fetch_token(); ?>"
+>
 <link rel="stylesheet" href="/assets/css/style.css">
 
 <div class="container">
@@ -357,6 +361,7 @@
     </div>
 
 </div>
+
 
 <script>
     const todosData = <?php echo json_encode($todos); ?>;

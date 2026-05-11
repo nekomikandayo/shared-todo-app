@@ -8,8 +8,25 @@ abstract class Controller_Base extends Controller
      */
     protected function require_csrf()
     {
-        if (! Security::check_token()) {
-            exit('CSRFトークンがありません、または無効です。ページを再読み込みしてから再度お試しください。');
+        $input = json_decode(
+            file_get_contents('php://input'),
+            true
+        );
+
+        $token = $input['csrf_token']
+            ?? Input::post('csrf_token');
+
+        if (!$token || !Security::check_token($token)) {
+            return Response::forge(
+                json_encode([
+                    'success' => false,
+                    'message' => 'CSRFトークンがありません'
+                ]),
+                403,
+                [
+                    'Content-Type' => 'application/json'
+                ]
+            );
         }
     }
 }
