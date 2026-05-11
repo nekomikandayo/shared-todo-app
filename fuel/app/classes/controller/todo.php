@@ -116,7 +116,7 @@ class Controller_Todo extends Controller_Base
             }
         }
 
-        DB::insert('todos')
+        list($todo_id, $rows_affected) = DB::insert('todos')
             ->set([
                 'title' => $title,
                 'description' => $description,
@@ -134,7 +134,7 @@ class Controller_Todo extends Controller_Base
     {
         $todo = DB::select()
             ->from('todos')
-            ->where('id', $id)
+            ->where('id', '=', $id)
             ->execute()
             ->current();
 
@@ -210,5 +210,143 @@ class Controller_Todo extends Controller_Base
             ->execute();
 
         return Response::redirect('/todo');
+    }
+    public function post_ajax_create()
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $title = trim($data['title'] ?? '');
+
+        if ($title === '') {
+            return Response::forge(
+                json_encode([
+                    'success' => false,
+                    'message' => 'Title is required'
+                ]),
+                400,
+                [
+                    'Content-Type' => 'application/json'
+                ]
+            );
+        }
+
+        $group_id = (int) ($data['group_id'] ?? 0);
+
+        list($todo_id, $rows_affected) = DB::insert('todos')
+            ->set([
+                'title' => $title,
+                'description' => $data['description'] ?? '',
+                'priority' => (int) ($data['priority'] ?? 2),
+                'status' => (int) ($data['status'] ?? 0),
+                'due_date' => !empty($data['due_date'])
+                    ? $data['due_date']
+                    : null,
+                'created_by' => 1,
+                'group_id' => $group_id,
+            ])
+            ->execute();
+
+        $todo = DB::select(
+            'todos.*',
+            ['users.username', 'creator_name']
+        )
+            ->from('todos')
+            ->join('users', 'LEFT')
+            ->on('todos.created_by', '=', 'users.id')
+            ->where('todos.id', '=', $todo_id)
+            ->execute()
+            ->current();
+
+        return Response::forge(
+            json_encode([
+                'success' => true,
+                'todo' => $todo
+            ]),
+            200,
+            [
+                'Content-Type' => 'application/json'
+            ]
+        );
+    }
+
+    public function post_ajax_delete($id)
+    {
+        DB::update('todos')
+            ->set([
+                'deleted_at' => date('Y-m-d H:i:s')
+            ])
+            ->where('id', '=', $id)
+            ->execute();
+
+        return Response::forge(
+            json_encode([
+                'success' => true
+            ]),
+            200,
+            [
+                'Content-Type' => 'application/json'
+            ]
+        );
+    }
+
+    public function post_ajax_update_status($id)
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $status = (int) ($data['status'] ?? 0);
+
+        DB::update('todos')
+            ->set([
+                'status' => $status
+            ])
+            ->where('id', '=', $id)
+            ->execute();
+
+        return Response::forge(
+            json_encode([
+                'success' => true
+            ]),
+            200,
+            [
+                'Content-Type' => 'application/json'
+            ]
+        );
+    }
+
+    public function post_ajax_update($id = null)
+    {
+        if ($id === null) {
+
+            return $this->response([
+                'success' => false,
+                'message' => 'ToDo IDがありません'
+            ]);
+        }
+
+        $input = json_decode(
+            file_get_contents('php://input'),
+            true
+        );
+
+        DB::update('todos')
+            ->set([
+                'title' => $input['title'] ?? '',
+                'description' => $input['description'] ?? '',
+                'priority' => $input['priority'] ?? 2,
+                'status' => $input['status'] ?? 0,
+                'due_date' => $input['due_date'] ?? null,
+            ])
+            ->where('id', '=', $id)
+            ->execute();
+
+        return Response::forge(
+            json_encode([
+                'success' => true,
+            ]),
+            200,
+            [
+                'Content-Type' => 'application/json'
+            ]
+        );
     }
 }

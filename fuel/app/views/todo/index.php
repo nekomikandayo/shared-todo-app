@@ -14,16 +14,12 @@
                     ← グループ一覧へ戻る
                 </a>
 
-                <?php if (!empty($group_id)): ?>
-
-                    <button
-                        class="btn btn--primary btn--sm todo-page__create-btn"
-                        id="open-modal"
-                        type="button">
-                        ToDoを作成
-                    </button>
-
-                <?php endif; ?>
+                <button
+                    class="btn btn--primary btn--sm todo-page__create-btn"
+                    id="open-modal"
+                    type="button">
+                    ToDoを作成
+                </button>
 
             </div>
 
@@ -53,11 +49,97 @@
 
                     <div class="modal-body">
 
-                        <?php echo View::forge('todo/_form', [
-                            'group_id' => $group_id,
-                        ]); ?>
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                タイトル
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="text"
+                                placeholder="タイトルを入力"
+                                data-bind="value: newTodoTitle">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                メモ
+                            </label>
+
+                            <textarea
+                                class="form-control"
+                                placeholder="メモを入力"
+                                data-bind="value: newTodoDescription"></textarea>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                優先度
+                            </label>
+
+                            <select
+                                class="form-control"
+                                data-bind="value: newTodoPriority">
+
+                                <option value="1">低</option>
+                                <option value="2">中</option>
+                                <option value="3">高</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                ステータス
+                            </label>
+
+                            <select
+                                class="form-control"
+                                data-bind="value: newTodoStatus">
+
+                                <option value="0">未完了</option>
+                                <option value="1">完了</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="form-label">
+                                期限
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="date"
+                                data-bind="value: newTodoDueDate">
+
+                        </div>
+
+                        <div class="todo-form__actions">
+
+                            <button
+                                class="btn btn--primary"
+                                type="button"
+                                data-bind="click: addTodo">
+
+                                作成する
+
+                            </button>
+
+                        </div>
 
                     </div>
+
+
 
                 </div>
 
@@ -65,350 +147,229 @@
 
         </div>
 
-        <?php
-        $priority_labels = Config::get('todo.priority_labels', []);
-        $status_labels = Config::get('todo.status_labels', []);
-        ?>
+    </div>
 
-        <div class="todo-list">
+    <div class="modal-overlay hidden" id="edit-modal">
 
-            <?php if (!empty($todos)): ?>
+        <div class="modal-content">
 
-                <?php foreach ($todos as $todo): ?>
+            <div class="modal-header">
 
-                    <div class="todo-card card">
+                <h2 class="modal-title">
+                    ToDo編集
+                </h2>
 
-                        <div class="todo-card__header">
+            </div>
 
-                            <h2 class="todo-card__title">
-                                <?php echo e($todo['title'] ?? ''); ?>
-                            </h2>
+            <div class="modal-body">
 
-                        </div>
+                <div class="form-group">
 
-                        <div class="todo-card__body">
+                    <label class="form-label">
+                        タイトル
+                    </label>
 
-                            <?php if (!empty($todo['description'])): ?>
-                                <div class="todo-memo">
-                                    <span class="todo-memo__label">メモ</span>
-                                    <p class="todo-memo__content">
-                                        <?php echo e($todo['description']); ?>
-                                    </p>
-                                </div>
-                            <?php endif; ?>
-
-                            <div class="todo-meta">
-
-                                <?php
-                                $p = (int) $todo['priority'];
-                                $priority_class = '';
-                                if ($p === 1) $priority_class = 'todo-badge--low';
-                                elseif ($p === 2) $priority_class = 'todo-badge--medium';
-                                elseif ($p === 3) $priority_class = 'todo-badge--high';
-                                ?>
-                                <div class="todo-meta__item">
-
-                                    <span class="todo-meta__label">
-                                        優先度
-                                    </span>
-
-                                    <span class="todo-badge <?php echo $priority_class; ?>">
-
-                                        <?php
-
-                                        echo isset($priority_labels[$p])
-                                            ? e($priority_labels[$p])
-                                            : e((string) $p);
-                                        ?>
-
-                                    </span>
-
-                                </div>
-                                <?php
-                                $s = (int) $todo['status'];
-                                $status_class = ($s === 1) ? 'todo-badge--done' : 'todo-badge--undone';
-                                ?>
-                                <div class="todo-meta__item">
-
-                                    <span class="todo-meta__label">
-                                        ステータス
-                                    </span>
-
-                                    <span class="todo-badge <?php echo $status_class; ?>">
-
-                                        <?php
-
-
-                                        echo isset($status_labels[$s])
-                                            ? e($status_labels[$s])
-                                            : e((string) $s);
-                                        ?>
-
-                                    </span>
-
-                                </div>
-
-                                <div class="todo-meta__item">
-
-                                    <span class="todo-meta__label">
-                                        期限
-                                    </span>
-
-                                    <span class="todo-meta__value">
-
-                                        <?php
-                                        echo !empty($todo['due_date'])
-                                            ? e(substr($todo['due_date'], 0, 10))
-                                            : e('未設定');
-                                        ?>
-
-                                    </span>
-
-                                </div>
-
-                                <div class="todo-meta__item">
-
-                                    <span class="todo-meta__label">
-                                        作成者
-                                    </span>
-
-                                    <span class="todo-meta__value">
-                                        <?php echo e($todo['creator_name'] ?? '不明'); ?>
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <div class="todo-card__footer">
-
-                            <button
-                                class="btn btn--secondary btn--sm"
-                                type="button"
-                                data-modal="edit-modal-<?php echo (int) $todo['id']; ?>">
-                                編集
-                            </button>
-
-                            <a
-                                class="btn btn--secondary btn--sm"
-                                href="/todo/delete/<?php echo (int) $todo['id']; ?>">
-                                削除
-                            </a>
-
-                        </div>
-
-                    </div>
-                    <div
-                        class="modal-overlay hidden"
-                        id="edit-modal-<?php echo (int) $todo['id']; ?>">
-
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-
-                                <h2 class="modal-title">
-                                    ToDo編集
-                                </h2>
-
-                            </div>
-
-                            <div class="modal-body">
-
-                                <form
-                                    method="post"
-                                    action="/todo/update/<?php echo (int) $todo['id']; ?>">
-
-                                    <?php echo Form::csrf(); ?>
-                                    <input
-                                        type="hidden"
-                                        name="group_id"
-                                        value="<?php echo (int) $todo['group_id']; ?>">
-                                        
-                                    <div class="form-group">
-
-                                        <label class="form-label">
-                                            タイトル
-                                        </label>
-
-                                        <input
-                                            class="form-control"
-                                            type="text"
-                                            name="title"
-                                            value="<?php echo e($todo['title'] ?? ''); ?>">
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label class="form-label">
-                                            メモ
-                                        </label>
-
-                                        <textarea
-                                            class="form-control"
-                                            name="description"><?php echo e($todo['description'] ?? ''); ?></textarea>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label class="form-label">
-                                            優先度
-                                        </label>
-
-                                        <select
-                                            class="form-control"
-                                            name="priority">
-
-                                            <?php foreach (Config::get('todo.priority_labels', []) as $value => $label): ?>
-
-                                                <option
-                                                    value="<?php echo (int) $value; ?>"
-                                                    <?php if ((int) $todo['priority'] === (int) $value) echo 'selected'; ?>>
-                                                    <?php echo e($label); ?>
-                                                </option>
-
-                                            <?php endforeach; ?>
-
-                                        </select>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label class="form-label">
-                                            ステータス
-                                        </label>
-
-                                        <select
-                                            class="form-control"
-                                            name="status">
-
-                                            <?php foreach (Config::get('todo.status_labels', []) as $value => $label): ?>
-
-                                                <option
-                                                    value="<?php echo (int) $value; ?>"
-                                                    <?php if ((int) $todo['status'] === (int) $value) echo 'selected'; ?>>
-                                                    <?php echo e($label); ?>
-                                                </option>
-
-                                            <?php endforeach; ?>
-
-                                        </select>
-
-                                    </div>
-
-                                    <div class="form-group">
-
-                                        <label class="form-label">
-                                            期限
-                                        </label>
-
-                                        <input
-                                            class="form-control"
-                                            type="date"
-                                            name="due_date"
-                                            value="<?php echo !empty($todo['due_date']) ? e(substr($todo['due_date'], 0, 10)) : ''; ?>">
-
-                                    </div>
-
-                                    <button
-                                        class="btn btn--primary"
-                                        type="submit">
-                                        更新する
-                                    </button>
-
-                                </form>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                <?php endforeach; ?>
-
-
-            <?php else: ?>
-
-                <div class="empty-card card text-center">
-
-                    <p class="text-muted">
-                        ToDoはまだありません
-                    </p>
+                    <input
+                        class="form-control"
+                        type="text"
+                        data-bind="value: editTodoTitle">
 
                 </div>
 
-            <?php endif; ?>
+                <div class="form-group">
+
+                    <label class="form-label">
+                        メモ
+                    </label>
+
+                    <textarea
+                        class="form-control"
+                        data-bind="value: editTodoDescription"></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        優先度
+                    </label>
+
+                    <select
+                        class="form-control"
+                        data-bind="value: editTodoPriority">
+
+                        <option value="1">低</option>
+                        <option value="2">中</option>
+                        <option value="3">高</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        ステータス
+                    </label>
+
+                    <select
+                        class="form-control"
+                        data-bind="value: editTodoStatus">
+
+                        <option value="0">未完了</option>
+                        <option value="1">完了</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        期限
+                    </label>
+
+                    <input
+                        class="form-control"
+                        type="date"
+                        data-bind="value: editTodoDueDate">
+
+                </div>
+
+                <div class="todo-form__actions">
+
+                    <button
+                        class="btn btn--primary"
+                        type="button"
+                        data-bind="click: updateTodo">
+
+                        保存する
+
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
-    <script>
-        const openButton = document.getElementById('open-modal');
-        const createModal = document.getElementById('todo-modal');
 
-        if (openButton) {
+    <div class="todo-list" data-bind="foreach: todos">
 
-            openButton.addEventListener('click', () => {
+        <div class="todo-card card">
 
-                createModal.classList.remove('hidden');
+            <div class="todo-card__header">
 
-            });
+                <h2 class="todo-card__title">
+                    <span data-bind="text: title()"></span>
+                </h2>
 
-        }
+            </div>
 
-        if (createModal) {
+            <div class="todo-card__body">
 
-            createModal.addEventListener('click', (event) => {
+                <div
+                    class="todo-memo"
+                    data-bind="visible: description()">
+                    <span class="todo-memo__label">メモ</span>
+                    <p class="todo-memo__content" data-bind="text: description()"></p>
+                </div>
 
-                if (event.target === createModal) {
+                <div class="todo-meta">
 
-                    createModal.classList.add('hidden');
+                    <div class="todo-meta__item">
+                        <span class="todo-meta__label">優先度</span>
+                        <span
+                            class="todo-badge"
+                            data-bind="
+                                    text: $parent.getPriorityLabel(priority),
+                                    css: $parent.getPriorityClass(priority)
+                                ">
+                        </span>
+                    </div>
 
-                }
+                    <div class="todo-meta__item">
+                        <span class="todo-meta__label">ステータス</span>
+                        <button
+                            class="todo-badge"
+                            type="button"
+                            data-bind="
+        text: $parent.getStatusLabel(status),
+        css: $parent.getStatusClass(status),
+        click: $parent.toggleStatus
+    ">
+                        </button>
+                    </div>
 
-            });
+                    <div class="todo-meta__item">
+                        <span class="todo-meta__label">期限</span>
+                        <span
+                            class="todo-meta__value"
+                            data-bind="text: due_date() || '未設定'">
+                        </span>
+                    </div>
 
-        }
+                    <div class="todo-meta__item">
+                        <span class="todo-meta__label">作成者</span>
+                        <span
+                            class="todo-meta__value"
+                            data-bind="text: creator_name() || '不明'">
+                        </span>
+                    </div>
 
-        const editButtons = document.querySelectorAll('[data-modal]');
+                </div>
 
-        editButtons.forEach((button) => {
+            </div>
 
-            button.addEventListener('click', () => {
+            <div class="todo-card__footer">
 
-                const modalId = button.dataset.modal;
+                <button
+                    class="btn btn--secondary btn--sm"
+                    type="button"
+                    data-bind="click: $parent.openEditModal">
 
-                const editModal = document.getElementById(modalId);
+                    編集
 
-                if (editModal) {
+                </button>
 
-                    editModal.classList.remove('hidden');
+                <button
+                    class="btn btn--secondary btn--sm"
+                    type="button"
+                    data-bind="click: $parent.deleteTodo">
+                    削除
+                </button>
 
-                }
+            </div>
 
-            });
+        </div>
 
-        });
+    </div>
 
-        const editModals = document.querySelectorAll('[id^="edit-modal-"]');
+    <div
+        class="empty-card card text-center"
+        data-bind="visible: todos().length === 0">
 
-        editModals.forEach((editModal) => {
+        <p class="text-muted">
+            ToDoはまだありません
+        </p>
 
-            editModal.addEventListener('click', (event) => {
-
-                if (event.target === editModal) {
-
-                    editModal.classList.add('hidden');
-
-                }
-
-            });
-
-        });
-    </script>
+    </div>
 
 </div>
+
+<script>
+    const todosData = <?php echo json_encode($todos); ?>;
+
+    const groupId = <?php echo $group_id; ?>;
+
+    const priorityLabels =
+        <?php echo json_encode(Config::get('todo.priority_labels')); ?>;
+
+    const statusLabels =
+        <?php echo json_encode(Config::get('todo.status_labels')); ?>;
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/knockout@3.5.1/build/output/knockout-latest.js"></script>
+
+<script src="/assets/js/todo.js"></script>
