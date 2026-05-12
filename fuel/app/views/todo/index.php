@@ -1,7 +1,6 @@
 <meta
     name="csrf-token"
-    content="<?php echo Security::fetch_token(); ?>"
->
+    content="<?php echo Security::fetch_token(); ?>">
 <link rel="stylesheet" href="/assets/css/style.css">
 
 <div class="container">
@@ -36,6 +35,20 @@
                         ToDo一覧
                     <?php endif; ?>
                 </h1>
+
+            </div>
+
+            <div class="todo-filter">
+
+                <label class="todo-filter__checkbox">
+
+                    <input
+                        type="checkbox"
+                        data-bind="checked: showIncompleteOnly">
+
+                    未完了のみ表示
+
+                </label>
 
             </div>
 
@@ -259,7 +272,7 @@
 
     </div>
 
-    <div class="todo-list" data-bind="foreach: todos">
+    <div class="todo-list" data-bind="foreach: filteredTodos">
 
         <div class="todo-card card">
 

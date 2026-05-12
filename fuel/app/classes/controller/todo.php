@@ -18,6 +18,9 @@ class Controller_Todo extends Controller_Base
             ->join('users', 'LEFT')
             ->on('todos.created_by', '=', 'users.id')
             ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
+            ->order_by('todos.priority', 'DESC')
+            ->order_by(DB::expr('todos.due_date IS NULL'), 'ASC')
+            ->order_by('todos.due_date', 'ASC')
             ->execute()
             ->as_array();
 
@@ -51,6 +54,9 @@ class Controller_Todo extends Controller_Base
             ->on('todos.created_by', '=', 'users.id')
             ->where('todos.group_id', '=', $group_id)
             ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
+            ->order_by('todos.priority', 'DESC')
+            ->order_by(DB::expr('todos.due_date IS NULL'), 'ASC')
+            ->order_by('todos.due_date', 'ASC')
             ->execute()
             ->as_array();
 
