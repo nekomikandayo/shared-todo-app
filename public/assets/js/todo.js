@@ -140,7 +140,7 @@ function TodoViewModel() {
         });
 
     });
-    
+
     self.newTodoTitle = ko.observable("");
     self.newTodoDescription = ko.observable("");
     self.newTodoPriority = ko.observable(2);
@@ -224,12 +224,9 @@ function TodoViewModel() {
 
             const data = await response.json();
 
-            if (!data.success) {
-
-                alert(data.message);
-
-                return;
-
+            if (!result.success) {
+                alert(result.message)
+                return
             }
 
             const newTodo = createTodo(data.todo);

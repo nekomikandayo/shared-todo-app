@@ -2,27 +2,18 @@
 
 class Controller_Todo extends Controller_Base
 {
+
     public function before()
     {
         parent::before();
+
+        \Package::load('auth');
 
         Config::load('todo', true);
     }
     public function action_index()
     {
-        $todos = DB::select(
-            'todos.*',
-            ['users.username', 'creator_name']
-        )
-            ->from('todos')
-            ->join('users', 'LEFT')
-            ->on('todos.created_by', '=', 'users.id')
-            ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
-            ->order_by('todos.priority', 'DESC')
-            ->order_by(DB::expr('todos.due_date IS NULL'), 'ASC')
-            ->order_by('todos.due_date', 'ASC')
-            ->execute()
-            ->as_array();
+        $todos = Model_Todo::get_all_todos();
 
         return Response::forge(
             View::forge('todo/index', [
@@ -36,29 +27,11 @@ class Controller_Todo extends Controller_Base
     {
         $group_id = (int) $group_id;
 
-        $group_row = DB::select('name')
-            ->from('groups')
-            ->where('id', '=', $group_id)
-            ->where('deleted_at', 'IS', DB::expr('NULL'))
-            ->execute()
-            ->current();
+        $group_row = Model_Group::find_group($group_id);
 
         $group_name = $group_row ? $group_row['name'] : null;
 
-        $todos = DB::select(
-            'todos.*',
-            ['users.username', 'creator_name']
-        )
-            ->from('todos')
-            ->join('users', 'LEFT')
-            ->on('todos.created_by', '=', 'users.id')
-            ->where('todos.group_id', '=', $group_id)
-            ->where('todos.deleted_at', 'IS', DB::expr('NULL'))
-            ->order_by('todos.priority', 'DESC')
-            ->order_by(DB::expr('todos.due_date IS NULL'), 'ASC')
-            ->order_by('todos.due_date', 'ASC')
-            ->execute()
-            ->as_array();
+        $todos = Model_Todo::get_group_todos($group_id);
 
         return Response::forge(
             View::forge('todo/index', [
@@ -90,59 +63,17 @@ class Controller_Todo extends Controller_Base
     {
         $this->require_csrf();
 
-        $title = trim(Input::post('title'));
+        $data = Model_Todo::validate_todo(Input::post());
 
-        if ($title === '') {
-            exit('Title is required');
-        }
-        $description = Input::post('description');
-        $priority = (int) Input::post('priority');
-        $allowed_priority = array_keys(Config::get('todo.priority_labels', []));
-        if (!in_array($priority, $allowed_priority, true)) {
-            exit('Invalid priority');
-        }
-        $status = (int) Input::post('status');
-        $group_id = (int) Input::post('group_id');
-        $allowed_status = array_keys(Config::get('todo.status_labels', []));
-        if (!in_array($status, $allowed_status, true)) {
-            exit('Invalid status');
-        }
-        $due_date = Input::post('due_date');
-        if ($due_date !== '') {
-            $date = DateTime::createFromFormat('Y-m-d', $due_date);
+        Model_Todo::create_todo($data);
 
-            if (
-                !$date ||
-                $date->format('Y-m-d') !== $due_date
-            ) {
-                exit('Invalid due date');
-            }
-            if ($due_date < date('Y-m-d')) {
-                exit('Past dates are not allowed');
-            }
-        }
-
-        list($todo_id, $rows_affected) = DB::insert('todos')
-            ->set([
-                'title' => $title,
-                'description' => $description,
-                'priority' => $priority,
-                'status' => $status,
-                'due_date' => $due_date ?: null,
-                'created_by' => 1,
-                'group_id' => $group_id,
-            ])
-            ->execute();
-
-        return Response::redirect('/todo/group/' . $group_id);
+        return Response::redirect('/todo/group/' . $data['group_id']);
     }
+
     public function action_edit($id)
     {
-        $todo = DB::select()
-            ->from('todos')
-            ->where('id', '=', $id)
-            ->execute()
-            ->current();
+
+        $todo = Model_Todo::find_todo($id);
 
         return Response::forge(
             View::forge('todo/edit', [
@@ -160,60 +91,15 @@ class Controller_Todo extends Controller_Base
     {
         $this->require_csrf();
 
-        $title = trim(Input::post('title'));
-        if ($title === '') {
-            exit('Title is required');
-        }
-        $description = Input::post('description');
+        $data = Model_Todo::validate_todo(Input::post());
 
-        $priority = (int) Input::post('priority');
-        $allowed_priority = array_keys(Config::get('todo.priority_labels', []));
-        if (!in_array($priority, $allowed_priority, true)) {
-            exit('Invalid priority');
-        }
-        $status = (int) Input::post('status');
-        $group_id = (int) Input::post('group_id');
+        Model_Todo::update_todo($id, $data);
 
-        $allowed_status = array_keys(Config::get('todo.status_labels', []));
-        if (!in_array($status, $allowed_status, true)) {
-            exit('Invalid status');
-        }
-        $due_date = Input::post('due_date');
-        if ($due_date !== '') {
-            $date = DateTime::createFromFormat('Y-m-d', $due_date);
-
-            if (
-                !$date ||
-                $date->format('Y-m-d') !== $due_date
-            ) {
-                exit('Invalid due date');
-            }
-            if ($due_date < date('Y-m-d')) {
-                exit('Past dates are not allowed');
-            }
-        }
-
-        DB::update('todos')
-            ->set([
-                'title' => $title,
-                'description' => $description,
-                'priority' => $priority,
-                'status' => $status,
-                'due_date' => $due_date ?: null,
-            ])
-            ->where('id', $id)
-            ->execute();
-
-        return Response::redirect('/todo/group/' . $group_id);
+        return Response::redirect('/todo/group/' . $data['group_id']);
     }
     public function action_delete($id)
     {
-        DB::update('todos')
-            ->set([
-                'deleted_at' => date('Y-m-d H:i:s')
-            ])
-            ->where('id', $id)
-            ->execute();
+        Model_Todo::delete_todo($id);
 
         return Response::redirect('/todo');
     }
@@ -222,47 +108,11 @@ class Controller_Todo extends Controller_Base
         $this->require_csrf();
         $data = json_decode(file_get_contents('php://input'), true);
 
-        $title = trim($data['title'] ?? '');
+        $data = Model_Todo::validate_todo($data);
 
-        if ($title === '') {
-            return Response::forge(
-                json_encode([
-                    'success' => false,
-                    'message' => 'Title is required'
-                ]),
-                400,
-                [
-                    'Content-Type' => 'application/json'
-                ]
-            );
-        }
+        $todo_id = Model_Todo::create_todo($data);
 
-        $group_id = (int) ($data['group_id'] ?? 0);
-
-        list($todo_id, $rows_affected) = DB::insert('todos')
-            ->set([
-                'title' => $title,
-                'description' => $data['description'] ?? '',
-                'priority' => (int) ($data['priority'] ?? 2),
-                'status' => (int) ($data['status'] ?? 0),
-                'due_date' => !empty($data['due_date'])
-                    ? $data['due_date']
-                    : null,
-                'created_by' => 1,
-                'group_id' => $group_id,
-            ])
-            ->execute();
-
-        $todo = DB::select(
-            'todos.*',
-            ['users.username', 'creator_name']
-        )
-            ->from('todos')
-            ->join('users', 'LEFT')
-            ->on('todos.created_by', '=', 'users.id')
-            ->where('todos.id', '=', $todo_id)
-            ->execute()
-            ->current();
+        $todo = Model_Todo::find_todo($todo_id);
 
         return Response::forge(
             json_encode([
@@ -279,12 +129,8 @@ class Controller_Todo extends Controller_Base
     public function post_ajax_delete($id)
     {
         $this->require_csrf();
-        DB::update('todos')
-            ->set([
-                'deleted_at' => date('Y-m-d H:i:s')
-            ])
-            ->where('id', '=', $id)
-            ->execute();
+
+        Model_Todo::delete_todo($id);
 
         return Response::forge(
             json_encode([
@@ -304,12 +150,7 @@ class Controller_Todo extends Controller_Base
 
         $status = (int) ($data['status'] ?? 0);
 
-        DB::update('todos')
-            ->set([
-                'status' => $status
-            ])
-            ->where('id', '=', $id)
-            ->execute();
+        Model_Todo::update_status($id, $status);
 
         return Response::forge(
             json_encode([
@@ -325,38 +166,43 @@ class Controller_Todo extends Controller_Base
     public function post_ajax_update($id = null)
     {
         $this->require_csrf();
-        if ($id === null) {
 
-            return $this->response([
-                'success' => false,
-                'message' => 'ToDo IDがありません'
-            ]);
+        try {
+
+            if ($id === null) {
+                throw new Exception('ToDo IDがありません');
+            }
+
+            $input = json_decode(
+                file_get_contents('php://input'),
+                true
+            );
+
+            $data = Model_Todo::validate_todo($input);
+
+            Model_Todo::update_todo($id, $data);
+
+            return Response::forge(
+                json_encode([
+                    'success' => true,
+                ]),
+                200,
+                [
+                    'Content-Type' => 'application/json'
+                ]
+            );
+        } catch (Exception $e) {
+
+            return Response::forge(
+                json_encode([
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ]),
+                400,
+                [
+                    'Content-Type' => 'application/json'
+                ]
+            );
         }
-
-        $input = json_decode(
-            file_get_contents('php://input'),
-            true
-        );
-
-        DB::update('todos')
-            ->set([
-                'title' => $input['title'] ?? '',
-                'description' => $input['description'] ?? '',
-                'priority' => $input['priority'] ?? 2,
-                'status' => $input['status'] ?? 0,
-                'due_date' => $input['due_date'] ?? null,
-            ])
-            ->where('id', '=', $id)
-            ->execute();
-
-        return Response::forge(
-            json_encode([
-                'success' => true,
-            ]),
-            200,
-            [
-                'Content-Type' => 'application/json'
-            ]
-        );
     }
 }
