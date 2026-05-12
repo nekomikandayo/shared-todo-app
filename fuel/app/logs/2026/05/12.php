@@ -83,3 +83,50 @@ WARNING - 2026-05-12 14:29:14 --> Fuel\Core\Fuel::init - The configured locale e
 WARNING - 2026-05-12 14:34:32 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 WARNING - 2026-05-12 14:34:38 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 WARNING - 2026-05-12 14:35:23 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 14:44:54 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:13 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:15 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:20 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:21 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:22 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:32 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:34 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:35 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:36 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 19:42:39 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 19:42:40 --> Error - Class 'Model_Group' not found in /var/www/html/my_fuel_project/fuel/app/classes/controller/todo.php on line 85
+WARNING - 2026-05-12 19:44:08 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 19:44:08 --> Error - syntax error, unexpected '$data' (T_VARIABLE), expecting function (T_FUNCTION) or const (T_CONST) in /var/www/html/my_fuel_project/fuel/app/classes/controller/todo.php on line 5
+WARNING - 2026-05-12 19:44:08 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 19:44:09 --> Error - syntax error, unexpected '$data' (T_VARIABLE), expecting function (T_FUNCTION) or const (T_CONST) in /var/www/html/my_fuel_project/fuel/app/classes/controller/todo.php on line 5
+WARNING - 2026-05-12 19:48:23 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 19:48:24 --> Error - Class 'Model_Group' not found in /var/www/html/my_fuel_project/fuel/app/classes/controller/todo.php on line 28
+WARNING - 2026-05-12 19:53:59 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 19:53:59 --> Error - Class 'Model_Group' not found in /var/www/html/my_fuel_project/fuel/app/classes/controller/todo.php on line 28
+WARNING - 2026-05-12 19:54:04 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 19:54:05 --> Error - Class 'Model_Group' not found in /var/www/html/my_fuel_project/fuel/app/classes/controller/todo.php on line 28
+WARNING - 2026-05-12 20:09:38 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:09:43 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 20:09:44 --> Error - Class 'Auth' not found in /var/www/html/my_fuel_project/fuel/app/classes/model/todo.php on line 86
+WARNING - 2026-05-12 20:09:50 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 20:09:50 --> Error - Class 'Auth' not found in /var/www/html/my_fuel_project/fuel/app/classes/model/todo.php on line 86
+WARNING - 2026-05-12 20:09:54 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:09:57 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:09:58 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:10:04 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 20:10:04 --> Error - Class 'Auth' not found in /var/www/html/my_fuel_project/fuel/app/classes/model/todo.php on line 86
+WARNING - 2026-05-12 20:10:09 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:15:19 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:15:27 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 20:15:27 --> Error - Class 'Auth' not found in /var/www/html/my_fuel_project/fuel/app/classes/model/todo.php on line 88
+WARNING - 2026-05-12 20:15:31 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:18:21 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:18:22 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:18:23 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:18:30 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:18:36 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:18:41 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:31:55 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:31:58 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:32:05 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 20:32:10 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
