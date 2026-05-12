@@ -35,6 +35,8 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 # Apacheモジュールを有効化
 RUN a2enmod rewrite headers
 
+COPY . /var/www/html/my_fuel_project
+
 # DocumentRootを変更し、環境変数を設定
 RUN DEFAULT_SITE_FILE=/etc/apache2/sites-enabled/000-default.conf && \
     TMP=$(mktemp) && \
