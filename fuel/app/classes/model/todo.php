@@ -14,9 +14,8 @@ class Model_Todo extends Model
     }
     public static function find_todo($id)
     {
-        return DB::select()
-            ->from('todos')
-            ->where('id', '=', $id)
+        return self::base_query()
+            ->where('todos.id', '=', $id)
             ->execute()
             ->current();
     }
@@ -85,13 +84,11 @@ class Model_Todo extends Model
     }
     public static function validate_todo($data)
     {
-        $user = Auth::get_user_id();
+        $user_id = Session::get('user_id');
 
-        if (!$user) {
+        if (!$user_id) {
             exit('Login required');
         }
-
-        list(, $user_id) = Auth::get_user_id();
 
         $title = trim($data['title'] ?? '');
 
@@ -149,6 +146,7 @@ class Model_Todo extends Model
             'status' => $status,
             'due_date' => $due_date,
             'group_id' => (int) ($data['group_id'] ?? 0),
+            'created_by' => $user_id,
         ];
     }
 }

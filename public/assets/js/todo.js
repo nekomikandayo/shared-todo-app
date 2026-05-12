@@ -224,8 +224,8 @@ function TodoViewModel() {
 
             const data = await response.json();
 
-            if (!result.success) {
-                alert(result.message)
+            if (!data.success) {
+                alert(data.message)
                 return
             }
 
