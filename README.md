@@ -84,7 +84,7 @@ CSRFトークンを導入し、
 
 ![Group一覧](images/groups.png)
 
-![ToDo一覧](images/TiDo.png)
+![ToDo一覧](images/ToDo.png)
 
 
 
