@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>グループ一覧</title>
@@ -43,8 +44,7 @@
                         class="invite-input"
                         type="text"
                         value="<?php echo e($url); ?>"
-                        readonly
-                    >
+                        readonly>
 
                     <p class="text-muted">
                         ※ 一度誰かが使用すると無効になります。
@@ -69,8 +69,7 @@
                         <form
                             class="group-form"
                             action="/groups/create"
-                            method="post"
-                        >
+                            method="post">
 
                             <?php echo Form::csrf(); ?>
 
@@ -81,8 +80,7 @@
                                     type="text"
                                     name="group_name"
                                     placeholder="グループ名を入力"
-                                    required
-                                >
+                                    required>
 
                             </div>
 
@@ -90,8 +88,7 @@
 
                                 <button
                                     class="btn btn--primary"
-                                    type="submit"
-                                >
+                                    type="submit">
                                     作成
                                 </button>
 
@@ -123,8 +120,7 @@
 
                                     <a
                                         class="group-card__title"
-                                        href="/todo/group/<?php echo (int) $group['id']; ?>"
-                                    >
+                                        href="/todo/group/<?php echo (int) $group['id']; ?>">
                                         <?php echo e($group['name']); ?>
                                     </a>
 
@@ -132,25 +128,30 @@
 
                                 <div class="group-card__actions">
 
-                                    <a
-                                        class="btn btn--secondary btn--sm"
-                                        href="/groups/invite/<?php echo (int) $group['id']; ?>"
-                                    >
-                                        招待URL
-                                    </a>
+                                    <form
+                                        action="/groups/invite/<?php echo (int) $group['id']; ?>"
+                                        method="post">
+
+                                        <?php echo Form::csrf(); ?>
+
+                                        <button
+                                            class="btn btn--secondary btn--sm"
+                                            type="submit">
+                                            招待URL
+                                        </button>
+
+                                    </form>
 
                                     <form
                                         action="/groups/delete/<?php echo (int) $group['id']; ?>"
-                                        method="post"
-                                    >
+                                        method="post">
 
                                         <?php echo Form::csrf(); ?>
 
                                         <button
                                             class="btn btn--secondary btn--sm"
                                             type="submit"
-                                            onclick="return confirm('本当にこのグループを削除しますか？\n削除すると元に戻せません。');"
-                                        >
+                                            onclick="return confirm('本当にこのグループを削除しますか？\n削除すると元に戻せません。');">
                                             削除
                                         </button>
 
@@ -182,8 +183,7 @@
 
                 <a
                     class="btn btn--secondary"
-                    href="/logout"
-                >
+                    href="/logout">
                     ログアウト
                 </a>
 
@@ -194,4 +194,5 @@
     </div>
 
 </body>
+
 </html>

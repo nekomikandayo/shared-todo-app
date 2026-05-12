@@ -9,10 +9,10 @@
             <h1 class="page-title login-title">
                 ログイン
             </h1>
-            <?php if (Session::get_flash('error')): ?>
+            <?php if ($login_error = Session::get_flash('error')): ?>
 
                 <p class="error-message">
-                    <?php echo e(Session::get_flash('error')); ?>
+                    <?php echo e($login_error); ?>
                 </p>
 
             <?php endif; ?>

@@ -2,12 +2,9 @@
 
 class Controller_Todo extends Controller_Base
 {
-
     public function before()
     {
         parent::before();
-
-        \Package::load('auth');
 
         Config::load('todo', true);
     }
@@ -23,13 +20,19 @@ class Controller_Todo extends Controller_Base
             ], false)
         );
     }
+    public function action_store()
+    {
+        return $this->post_store();
+    }
     public function action_group($group_id)
     {
         $group_id = (int) $group_id;
 
         $group_row = Model_Group::find_group($group_id);
 
-        $group_name = $group_row ? $group_row['name'] : null;
+        $group_name = $group_row
+            ? $group_row['name']
+            : null;
 
         $todos = Model_Todo::get_group_todos($group_id);
 
@@ -54,11 +57,6 @@ class Controller_Todo extends Controller_Base
             ], false)
         );
     }
-    public function action_store()
-    {
-        return $this->post_store();
-    }
-
     public function post_store()
     {
         $this->require_csrf();
@@ -69,10 +67,8 @@ class Controller_Todo extends Controller_Base
 
         return Response::redirect('/todo/group/' . $data['group_id']);
     }
-
     public function action_edit($id)
     {
-
         $todo = Model_Todo::find_todo($id);
 
         return Response::forge(
@@ -106,7 +102,11 @@ class Controller_Todo extends Controller_Base
     public function post_ajax_create()
     {
         $this->require_csrf();
-        $data = json_decode(file_get_contents('php://input'), true);
+
+        $data = json_decode(
+            file_get_contents('php://input'),
+            true
+        );
 
         $data = Model_Todo::validate_todo($data);
 
@@ -129,7 +129,6 @@ class Controller_Todo extends Controller_Base
     public function post_ajax_delete($id)
     {
         $this->require_csrf();
-
         Model_Todo::delete_todo($id);
 
         return Response::forge(
@@ -166,43 +165,31 @@ class Controller_Todo extends Controller_Base
     public function post_ajax_update($id = null)
     {
         $this->require_csrf();
+        if ($id === null) {
 
-        try {
-
-            if ($id === null) {
-                throw new Exception('ToDo IDがありません');
-            }
-
-            $input = json_decode(
-                file_get_contents('php://input'),
-                true
-            );
-
-            $data = Model_Todo::validate_todo($input);
-
-            Model_Todo::update_todo($id, $data);
-
-            return Response::forge(
-                json_encode([
-                    'success' => true,
-                ]),
-                200,
-                [
-                    'Content-Type' => 'application/json'
-                ]
-            );
-        } catch (Exception $e) {
-
-            return Response::forge(
-                json_encode([
-                    'success' => false,
-                    'message' => $e->getMessage()
-                ]),
-                400,
-                [
-                    'Content-Type' => 'application/json'
-                ]
-            );
+            return $this->response([
+                'success' => false,
+                'message' => 'ToDo IDがありません'
+            ]);
         }
+
+        $input = json_decode(
+            file_get_contents('php://input'),
+            true
+        );
+
+        $data = Model_Todo::validate_todo($input);
+
+        Model_Todo::update_todo($id, $data);
+
+        return Response::forge(
+            json_encode([
+                'success' => true,
+            ]),
+            200,
+            [
+                'Content-Type' => 'application/json'
+            ]
+        );
     }
 }

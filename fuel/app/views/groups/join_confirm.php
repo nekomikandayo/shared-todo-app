@@ -25,14 +25,14 @@
 
                 <p class="confirm-message">
 
-                    「<?php echo e($invite['group_name']); ?>」に参加しますか？
+                    「<?php echo e($invite['group_name'] ?? ''); ?>」に参加しますか？
 
                 </p>
 
                 <form
                     class="confirm-form"
                     method="post"
-                    action="/groups/join/<?php echo e($token); ?>"
+                    action="/groups/join/<?php echo e($token ?? ''); ?>"
                 >
 
                     <?php echo Form::csrf(); ?>

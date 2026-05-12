@@ -130,3 +130,55 @@ WARNING - 2026-05-12 20:31:55 --> Fuel\Core\Fuel::init - The configured locale e
 WARNING - 2026-05-12 20:31:58 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 WARNING - 2026-05-12 20:32:05 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
 WARNING - 2026-05-12 20:32:10 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:00:29 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:00:32 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:00:33 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:02:01 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:02:02 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:02:04 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:02:05 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:02:09 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:03:55 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:03:56 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:04:02 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:04:04 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:04:04 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:04:13 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:06:24 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:06:24 --> Compile Error - Cannot redeclare Controller_Groups::post_create() in /var/www/html/my_fuel_project/fuel/app/classes/controller/groups.php on line 52
+WARNING - 2026-05-12 22:06:29 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:07:41 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:07:41 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:07:42 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:07:43 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:07:48 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:26:08 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:26:08 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:26:14 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:27:35 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:27:36 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:27:37 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:27:45 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:27:47 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:27:47 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:27:51 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:27:59 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:28:00 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:30:26 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:30:27 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:30:28 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:30:29 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:30:35 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:35:19 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:35:20 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:35:25 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:35:25 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:35:29 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:39:06 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:39:07 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:39:16 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:39:17 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+ERROR - 2026-05-12 22:39:18 --> Warning - get_class() expects parameter 1 to be object, null given in /var/www/html/my_fuel_project/fuel/core/classes/security.php on line 241
+WARNING - 2026-05-12 22:45:05 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:45:12 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
+WARNING - 2026-05-12 22:45:13 --> Fuel\Core\Fuel::init - The configured locale en_US is not installed on your system.
