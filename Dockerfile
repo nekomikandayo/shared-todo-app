@@ -52,9 +52,13 @@ RUN mkdir /var/log/fuel /var/cache/fuel && \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
+# アプリ配置
+RUN mkdir /var/www/html/my_fuel_project
+
+COPY . /var/www/html/my_fuel_project
+
 # Oilをインストール
-RUN mkdir /var/www/html/my_fuel_project && \
-    cd /var/www/html/my_fuel_project && \
+RUN cd /var/www/html/my_fuel_project && \
     curl https://get.fuelphp.com/oil | sh
 
 EXPOSE 80
