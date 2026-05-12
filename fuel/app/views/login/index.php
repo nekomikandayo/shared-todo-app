@@ -9,12 +9,17 @@
             <h1 class="page-title login-title">
                 ログイン
             </h1>
+            <?php if (Session::get_flash('error')): ?>
 
+                <p class="error-message">
+                    <?php echo e(Session::get_flash('error')); ?>
+                </p>
+
+            <?php endif; ?>
             <form
                 class="login-form"
                 method="post"
-                action="/login"
-            >
+                action="/login">
 
                 <?php echo Form::csrf(); ?>
 
@@ -24,8 +29,7 @@
                         class="form-control"
                         type="text"
                         name="username"
-                        placeholder="ユーザー名"
-                    >
+                        placeholder="ユーザー名">
 
                 </div>
 
@@ -35,8 +39,7 @@
                         class="form-control"
                         type="password"
                         name="password"
-                        placeholder="パスワード"
-                    >
+                        placeholder="パスワード">
 
                 </div>
 
@@ -46,8 +49,7 @@
                         class="btn btn--primary"
                         type="submit"
                         name="mode"
-                        value="login"
-                    >
+                        value="login">
                         ログイン
                     </button>
 
@@ -59,8 +61,7 @@
                         class="btn btn--secondary"
                         type="submit"
                         name="mode"
-                        value="register"
-                    >
+                        value="register">
                         新規登録
                     </button>
 

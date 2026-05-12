@@ -6,8 +6,7 @@ class Controller_Login extends Controller_Base
     {
         parent::before();
 
-        if (Session::get('user_id'))
-        {
+        if (Session::get('user_id')) {
             Response::redirect('/groups');
             exit;
         }
@@ -15,17 +14,20 @@ class Controller_Login extends Controller_Base
 
     public function action_index()
     {
-        if (Input::method() === 'POST')
-        {
+        if (Input::method() === 'POST') {
             $this->require_csrf();
 
             $username = trim(Input::post('username'));
             $password = Input::post('password');
             $mode = Input::post('mode');
 
-            if ($username === '' || $password === '')
-            {
-                exit('ユーザー名とパスワードを入力してください');
+            if ($username === '' || $password === '') {
+                Session::set_flash(
+                    'error',
+                    'ユーザー名とパスワードを入力してください'
+                );
+
+                return Response::redirect('/login');
             }
 
             $user = DB::select()
@@ -34,11 +36,14 @@ class Controller_Login extends Controller_Base
                 ->execute()
                 ->current();
 
-            if ($mode === 'register')
-            {
-                if ($user)
-                {
-                    exit('既に存在するユーザーです');
+            if ($mode === 'register') {
+                if ($user) {
+                    Session::set_flash(
+                        'error',
+                        '既に存在するユーザーです'
+                    );
+
+                    return Response::redirect('/login');
                 }
 
                 list($user_id, $rows) = DB::insert('users')
@@ -59,14 +64,19 @@ class Controller_Login extends Controller_Base
             if (
                 $user &&
                 password_verify($password, $user['password'])
-            )
-            {
+            ) {
                 Session::set('user_id', $user['id']);
 
                 return Response::redirect('/groups');
             }
 
-            exit('ログインに失敗しました');
+            Session::set_flash(
+                'error',
+                'ログインに失敗しました'
+            );
+
+
+            return Response::redirect('/login');
         }
 
         return View::forge('login/index');
