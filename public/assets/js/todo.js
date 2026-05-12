@@ -123,7 +123,24 @@ function TodoViewModel() {
         })
 
     );
-    self.editTodoId = ko.observable(null);
+    self.showIncompleteOnly = ko.observable(false);
+
+    self.filteredTodos = ko.computed(function () {
+
+        if (!self.showIncompleteOnly()) {
+
+            return self.todos();
+
+        }
+
+        return self.todos().filter(function (todo) {
+
+            return Number(todo.status()) === 0;
+
+        });
+
+    });
+    
     self.newTodoTitle = ko.observable("");
     self.newTodoDescription = ko.observable("");
     self.newTodoPriority = ko.observable(2);
@@ -192,7 +209,7 @@ function TodoViewModel() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                   
+
                 },
                 body: JSON.stringify({
                     csrf_token: csrfToken,
@@ -215,9 +232,28 @@ function TodoViewModel() {
 
             }
 
-            self.todos.push(
-                createTodo(data.todo)
-            );
+            const newTodo = createTodo(data.todo);
+
+            self.todos.push(newTodo);
+
+            self.todos.sort((a, b) => {
+
+                const priorityDiff =
+                    Number(b.priority()) - Number(a.priority());
+
+                if (priorityDiff !== 0) {
+
+                    return priorityDiff;
+
+                }
+
+                const aDate = a.due_date() || '9999-12-31';
+                const bDate = b.due_date() || '9999-12-31';
+
+                return aDate.localeCompare(bDate);
+
+            });
+
 
             self.newTodoTitle("");
             self.newTodoDescription("");
@@ -360,14 +396,14 @@ function TodoViewModel() {
     self.updateTodo = async function () {
 
         try {
-    
+
             const response = await fetch(
                 '/todo/ajax_update/' + self.editTodoId(),
                 {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                 
+
 
                     },
                     body: JSON.stringify({
@@ -380,44 +416,62 @@ function TodoViewModel() {
                     })
                 }
             );
-    
+
             const data = await response.json();
-    
+
             if (!data.success) {
-    
+
                 alert(data.message);
-    
+
                 return;
-    
+
             }
-    
+
             const todo = self.todos().find(
                 (item) => item.id === self.editTodoId()
             );
-    
+
             if (todo) {
-    
+
                 todo.title(self.editTodoTitle());
                 todo.description(self.editTodoDescription());
                 todo.priority(self.editTodoPriority());
                 todo.status(self.editTodoStatus());
                 todo.due_date(self.editTodoDueDate());
-    
+
             }
-    
+
             document
                 .getElementById('edit-modal')
                 .classList
                 .add('hidden');
-    
+
+            self.todos.sort((a, b) => {
+
+                const priorityDiff =
+                    Number(b.priority()) - Number(a.priority());
+
+                if (priorityDiff !== 0) {
+
+                    return priorityDiff;
+
+                }
+
+                const aDate = a.due_date() || '9999-12-31';
+                const bDate = b.due_date() || '9999-12-31';
+
+                return aDate.localeCompare(bDate);
+
+            });
+
         } catch (error) {
-    
+
             console.error(error);
-    
+
             alert('更新に失敗しました');
-    
+
         }
-    
+
     };
 
 }
