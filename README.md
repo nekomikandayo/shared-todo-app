@@ -80,7 +80,7 @@ CSRFトークンを導入し、
 - TypeScript化
 - Vue / React への移行
 
-## ToDo一覧画面
+## ToDo、group一覧画面
 
 ![Group一覧](images/groups.png)
 
