@@ -14,10 +14,6 @@
 
         <div class="card-body">
 
-        <?php echo View::forge('todo/_form', [
-            'group_id' => $group_id,
-        ], false); ?>
-
         </div>
 
     </div>
