@@ -300,9 +300,9 @@
                         <span
                             class="todo-badge"
                             data-bind="
-                                    text: $parent.getPriorityLabel(priority),
-                                    css: $parent.getPriorityClass(priority)
-                                ">
+                                text: $parent.getPriorityLabel(priority),
+                                css: $parent.getPriorityClass(priority)
+                            ">
                         </span>
                     </div>
 
@@ -312,10 +312,10 @@
                             class="todo-badge"
                             type="button"
                             data-bind="
-        text: $parent.getStatusLabel(status),
-        css: $parent.getStatusClass(status),
-        click: $parent.toggleStatus
-    ">
+                                text: $parent.getStatusLabel(status),
+                                css: $parent.getStatusClass(status),
+                                click: $parent.toggleStatus
+                            ">
                         </button>
                     </div>
 
@@ -377,17 +377,22 @@
 
 
 <script>
-    const todosData = <?php echo json_encode($todos); ?>;
+    const todosData = <?php echo json_encode(
+        $todos,
+        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    ); ?>;
 
-    const groupId = <?php echo $group_id; ?>;
+    const groupId = <?php echo (int) $group_id; ?>;
 
-    const priorityLabels =
-        <?php echo json_encode(Config::get('todo.priority_labels')); ?>;
+    const priorityLabels = <?php echo json_encode(
+        Config::get('todo.priority_labels'),
+        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    ); ?>;
 
-    const statusLabels =
-        <?php echo json_encode(Config::get('todo.status_labels')); ?>;
+    const statusLabels = <?php echo json_encode(
+        Config::get('todo.status_labels'),
+        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+    ); ?>;
 </script>
-
 <script src="https://cdn.jsdelivr.net/npm/knockout@3.5.1/build/output/knockout-latest.js"></script>
-
 <script src="/assets/js/todo.js"></script>
