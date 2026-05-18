@@ -93,8 +93,10 @@ class Controller_Todo extends Controller_Base
 
         return Response::redirect('/todo/group/' . $data['group_id']);
     }
-    public function action_delete($id)
+    public function post_delete($id)
     {
+        $this->require_csrf();
+
         Model_Todo::delete_todo($id);
 
         return Response::redirect('/todo');

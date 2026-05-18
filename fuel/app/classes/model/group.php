@@ -29,20 +29,32 @@ class Model_Group extends Model
 
     public static function create_group($group_name, $user_id)
     {
-        list($group_id) = DB::insert('groups')
-            ->set([
-                'name' => $group_name,
-            ])
-            ->execute();
+        DB::start_transaction();
 
-        DB::insert('group_users')
-            ->set([
-                'user_id'  => $user_id,
-                'group_id' => $group_id,
-            ])
-            ->execute();
+        try {
 
-        return $group_id;
+            list($group_id) = DB::insert('groups')
+                ->set([
+                    'name' => $group_name,
+                ])
+                ->execute();
+
+            DB::insert('group_users')
+                ->set([
+                    'user_id'  => $user_id,
+                    'group_id' => $group_id,
+                ])
+                ->execute();
+
+            DB::commit_transaction();
+
+            return $group_id;
+        } catch (Exception $e) {
+
+            DB::rollback_transaction();
+
+            throw $e;
+        }
     }
 
     public static function delete_group($group_id)
