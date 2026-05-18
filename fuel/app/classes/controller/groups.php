@@ -81,7 +81,15 @@ class Controller_Groups extends Controller_Base
 
     public function post_invite($group_id)
     {
+        
+
         $this->require_csrf();
+
+        $user_id = Session::get('user_id');
+
+        if (!Model_Group::is_member($group_id, $user_id)) {
+            exit('権限がありません');
+        }
 
         $token = Model_Group::create_invite($group_id);
 
